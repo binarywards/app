@@ -1,0 +1,91 @@
+#preloader {
+	top: 0;
+	left: 0;
+	width: 100%;
+	margin: 0 !important;
+	position: absolute;
+	z-index: 10000;
+}
+
+.flex {
+	display: flex;
+	flex-wrap: wrap;
+}
+
+.d-none {
+	display: none !important;
+}
+
+.logo-img {
+	max-height: 64px !important;
+	width: auto;
+	padding: 15px 0 !important;
+}
+
+.bold {
+	font-weight: bold !important;
+}
+
+.semi-bold {
+	font-weight: 400 !important;
+}
+
+/*
+Sticky footer using flex box
+Courtesy: https://css-tricks.com/couple-takes-sticky-footer/
+ */
+body {
+	height: 100%;
+	margin-bottom: 0 !important;
+}
+
+html{
+	height: 100%;
+}
+
+body {
+	display: flex !important;
+	flex-direction: column;
+	padding-bottom: 0 !important;
+}
+
+.content {
+	flex: 1 0 auto;
+}
+
+@media (min-width: 992px) {
+	.content, footer{
+        margin-left: 300px !important;
+    }
+}
+
+#search_box{
+height: 32px !important;
+margin: 0 !important;
+border: none !important;
+}
+
+#search_box:focus{
+	border-bottom: none !important;
+}
+
+#search_box.active{
+	border-bottom: none !important;
+}
+
+#search_btn{
+	height: 32px !important;
+	border: none !important;
+	box-shadow: none !important;
+	border-radius: 0 !important;
+}
+
+#search_box::-webkit-input-placeholder, #search_box::-moz-placeholder, #search_box:-ms-input-placeholder , #search_box:-moz-placeholder{
+	color: white;
+}
+
+.center-all{
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
