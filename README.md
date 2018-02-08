@@ -24,5 +24,3 @@
 |api/company_update_campaign|PUT|user_name, campaign_id, key, value|Updates details of a campaign|
 |api/company_delete_campaign|DELETE|user_name, campaign_id|Updates details of a campaign|
 |api/ussd_callback|POST|sessionid, phoneNumber, serviceCode, text|Handles USSD requests and responses|
-
-
