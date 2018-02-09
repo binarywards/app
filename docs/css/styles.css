@@ -83,3 +83,9 @@ border: none !important;
 #search_box::-webkit-input-placeholder, #search_box::-moz-placeholder, #search_box:-ms-input-placeholder , #search_box:-moz-placeholder{
 	color: white;
 }
+
+.center-all{
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
