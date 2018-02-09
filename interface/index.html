@@ -34,13 +34,13 @@
         </div>
     </li>
 
-    <li class="menu active"><a href="#" class="white-text" onclick="page(this.hash)">
+    <li class="menu active"><a href="#home" class="white-text" onclick="switch_page(this.hash)">
         <i class="fa fa-home white-text"></i> Home</a></li>
-    <li class="menu"><a href="#" class="white-text" onclick="page(this.hash)"><i class="fa fa-info white-text"></i>
+    <li class="menu"><a href="#" class="white-text" onclick="switch_page(this.hash)"><i class="fa fa-info white-text"></i>
         About</a></li>
-    <li class="menu"><a href="#" class="white-text" onclick="page(this.hash)"><i
+    <li class="menu"><a href="#" class="white-text" onclick="switch_page(this.hash)"><i
             class="fa fa-phone white-text"></i> Contact</a></li>
-    <li class="menu"><a href="#" class="white-text" onclick="page(this.hash)"><i class="fa fa-question white-text"></i>
+    <li class="menu"><a href="#" class="white-text" onclick="switch_page(this.hash)"><i class="fa fa-question white-text"></i>
         FAQ</a></li>
 </ul>
 <a href="#" style="margin: 20px 10px; top: 0px; right: 0px; position: absolute;" data-activates="side-bar"
@@ -50,13 +50,13 @@
 <div id="preloader" class="progress amber darken-4">
     <div class="indeterminate white"></div>
 </div>
-<div class="content d-none center-all" id="home" >
+<div class="content center-all" id="home" >
     <div class="center amber-text text-darken-4">
         <h1 class="">Welcome to Bina Rywards</h1>
         <p class="flow-text">Choose your type of profile to continue:</p>
         <div>
-            <a class="btn amber darken-4 white-text waves-effect waves-light">Redeem Code</a>
-            <a class="btn amber darken-4 white-text waves-effect waves-light">Company Login</a>
+            <button class="btn amber darken-4 white-text waves-effect waves-light" onclick="redeemPage()">Redeem Code</button>
+            <button class="btn amber darken-4 white-text waves-effect waves-light" onclick="loginPage()">Company Login</button>
         </div>
     </div>
 </div>
@@ -161,7 +161,7 @@
                             </div>
                         </div>
                         <div class = "center" >
-                            <button class=" center btn btn-large white-text amber darken-4 waves-effect waves-light" id="btn_login"> Sign In</button>
+                            <button class=" center btn btn-large white-text amber darken-4 waves-effect waves-light" id="btn_login" onclick="switch_page('#dashboard')"> Sign In</button>
                         </div>
                     </form>
                 </div>
@@ -170,7 +170,47 @@
         </div>
     </div>
 </div>
-<div class="content center" id="campaign_registration">
+<div class="content amber-text text-darken-4 d-none center-all" id="dashboard">
+    <div class="row" style="min-width: 80%;">
+        <div class="col s12">
+            <div class="card white amber-text darken-4">
+                <div class="card-content amber-text text-darken-4">
+                    <h4 class="card-title center"> <i class="fa fa-industry"></i>Company Name</h4>
+                   <div class="row center-all">
+                    <div class="col"><a class="waves-effect waves-light btn-large amber darken-4" onclick="switch_page('#display_campaign')"><i class="fa fa-plus-square left"></i>Campaigns</a></div>
+                    <div class="col"><a class="waves-effect waves-light btn-large amber darken-4 "><i class="fa fa-credit-card left"></i>Load Account</a></div>
+                   </div>
+                    <div class="row" >
+                        <h4 class="col s6 right-align"><i class="fa fa-credit-card-alt"></i> Balance: </h4>
+                        <h4 class="col s6 left-align">KES 1200</h4>
+                    </div>
+                    <ul class="collapsible" data-collapsible="accordion">
+                        <li>
+                            <div class="collapsible-header"><i class="fa fa-address-card-o"></i>Company profile</div>
+                            <div class="collapsible-body">
+                                <p>Company Name: <span> </span></p>
+                                <p>Company Code:<span></span></p>
+                                <p>Email Address: <span></span></p>
+                                <p>Telephone: <span> </span></p>
+
+                                <p class="center">Change Password</p>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="collapsible-header"><i class="fa fa-history"></i>Account History</div>
+                            <div class="collapsible-body">
+                                <ul class="collection">
+                                    <li></li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="content center d-none" id="campaign_registration">
 
         <h5 class="amber-text text-darken-4"> Campaign Registration</h5>
         <div class="row">
@@ -231,11 +271,89 @@
                     </div>
                 </div>
                 <div class = "center" >
-                    <button class=" center btn btn-large white-text amber darken-4 waves-effect waves-light" id="create_campaign"> Create Campaign</button>
+                    <button class=" center btn btn-large white-text amber darken-4 waves-effect waves-light" id="#dashboard" onclick="switch_page('#display_campaign')"> Create Campaign</button>
                 </div>
             </form>
         </div>
 </div>
+<div class = "content d-none" id="display_campaign">
+    <h4 class="text-darken-4 amber-text center"> Company Name</h4>
+    <div class="row">
+        <div class="col s12 m4">
+            <div class="card white amber-text darken-4">
+                <div class="card-content amber-text text-darken-4">
+                    <span class="card-title">Campaign  <i class="fa fa-plus" title="click to add a new campaign" onclick="switch_page('#campaign_registration')"></i> </span>
+                    <ul>
+                        <li> Buy one get one free</li>
+                        <li> Shabiki Reloads</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="col s12 m8">
+            <div class="card white darken-4">
+                <div class="card-content amber-text text-darken-4">
+                    <span class="card-title">Campaign Name</span>
+                    <p>Amount</p>
+                    <p> Details</p>
+
+                    <div class="row">
+                        <form class="col s12">
+                            <div class="row">
+                                <div class="input-field col s12">
+                                    <input value="" id="campaignCode" type="text" class="validate">
+                                    <label for="campaignCode">Campaign code</label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="input-field col s12">
+                                    <input value="" id="campaignMessage" type="text" class="validate">
+                                    <label for="campaignMessage">Campaign Message</label>
+                                </div>
+                            </div><div class="row">
+                            <div class="input-field col s12">
+                                <input value="" id="campaignCustomMessage" type="text" class="validate">
+                                <label for="campaignCustomMessage">Campaign Custom Message</label>
+                            </div>
+                        </div><div class="row">
+                            <div class="input-field col s12">
+                                <input value="" id="campaignDescription" type="text" class="validate">
+                                <label for="campaignDescription">Campaign Description</label>
+                            </div>
+                        </div><div class="row">
+                            <div class="input-field col s12">
+                                <input value="" id="campaignCallbackUrl" type="text" class="validate">
+                                <label for="campaignCallbackUrl">Campaign Callback Url</label>
+                            </div>
+                        </div><div class="row">
+                            <div class="input-field col s12">
+                                <input value="" id="campaignRewardCalls" type="text" class="validate">
+                                <label for="campaignRewardCalls">Campaign Reward Calls</label>
+                            </div>
+                        </div><div class="row">
+                            <div class="input-field col s12">
+                                <input value="" id="campaignRewardType" type="text" class="validate">
+                                <label for="campaignRewardType">Campaign Reward Type</label>
+                            </div>
+                        </div><div class="row">
+                            <div class="input-field col s12">
+                                <button class=" btn btn-large amber darken-4 white-text collapsible fa-align-right" id="add_token" data-activates="#token_details">Add Token</button>
+                            </div>
+                        </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="card-action">
+                    <a href="#">This is a link</a>
+                    <a href="#">This is a link</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
 <footer class="page-footer">
     <div class="footer-copyright amber white-text darken-4 center" style="margin-top: -20px;">
         <div class="container semi-bold">
@@ -249,6 +367,8 @@
 <!--Import jQuery before materialize.js-->
 <script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
 <script type="text/javascript" src="js/materialize.min.js"></script>
+<script type="text/javascript" src="js/actions.js"></script>
+
 <script>
     $('.button-collapse').sideNav({
             menuWidth: 300, // Default is 300
@@ -261,6 +381,17 @@
             }, // A function to be called when sideNav is closed
         }
     );
+    function switch_page(id){
+        document.querySelector('#home').classList.add('d-none');
+        document.querySelector('#campaign_registration').classList.add('d-none');
+        document.querySelector('#company_login').classList.add('d-none');
+        document.querySelector('#redeem_code').classList.add('d-none');
+        document.querySelector('#display_campaign').classList.add('d-none');
+        document.querySelector('#dashboard').classList.add('d-none');
+        if(document.querySelector(id).classList.contains('d-none')) {
+            document.querySelector(id).classList.remove('d-none');
+        }
+    }
 </script>
 <script>
     document.querySelector("#preloader").classList.add('d-none');
