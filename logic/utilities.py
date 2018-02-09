@@ -7,6 +7,7 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from validate_email import validate_email
 import pendulum
+import threading
 
 
 class status_code:
@@ -107,7 +108,8 @@ def validate_phone(phone):
             (0 <= int(phone[-8] + phone[-7]) < 40) or
             (60 <= int(phone[-8] + phone[-7]) < 100)
     ):
-        return True,
+
+        return True, "+254"+phone[len(phone)-9:len(phone)]
     else:
         return False
 
@@ -139,3 +141,16 @@ def py_jax(url, method="GET", data_type="json", headers=None, **params):
     else:
         response = request.text
     return response
+
+
+def async_jax(url, method="GET", data_type="json", headers=None, **params):
+    threading.Thread(target=py_jax, kwargs=dict(url=url, method=method, data_type=data_type,
+                                                headers=headers, **params))
+
+
+def async_logger(title, data):
+    threading.Thread(target=log_error, kwargs=dict(title=title, data=data)).start()
+
+
+def run_in_background(method, **parameters):
+    threading.Thread(target=method, kwargs=parameters).start()
