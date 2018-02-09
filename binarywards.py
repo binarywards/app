@@ -128,7 +128,7 @@ def api_actions(api_action):
             status = status_code.not_found
             out["message"] = "Unknown action, please check: "+url_for("/api")
     except Exception as e:
-        utils.log_error("API action error:", str(e))
+        utils.async_logger("API action error:", str(e))
         out["message"] = "An error occurred"
     return Response(dict_to_json(out), content_type="text/json"), status
 
@@ -186,7 +186,7 @@ def handle_json(data):
             status = status_code.not_found
             out["message"] = "Unknown action, please check: "+url_for("/api")
     except Exception as e:
-        utils.log_error("API action error:", str(e))
+        utils.async_logger("API action error:", str(e))
         out["message"] = "An error occurred"
     out['action'] = action
     out['status'] = status
