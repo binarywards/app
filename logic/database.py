@@ -1,18 +1,18 @@
 """
 The database will be used to store user's details
 Including: phone_number, password, email and user_name
-Companies: email, phone_number, password, name, use_code
-Campaigns: use_code, campaign_name, details, campaign_code, custom_message
+Companies: email, phone_number, password, name, company_code
+Campaigns: company_code, campaign_name, details, campaign_code, custom_message
 Campaigns_data: campaign_id, item_id, prize_type, prize_amount, winner, delivered, delivery_id
 Ussd_sessions: session_id, phone_number, text, time_stamp
 """
 
 import pyrebase
 import os
-import json
+import logic.utilities as utils
 
 config = {
-    "apiKey": "apiKey",
+    "apiKey": os.environ.get('firebase_key', 'lost it?'),
     "authDomain": "binarywards.firebaseapp.com",
     "databaseURL": "https://binarywards.firebaseio.com",
     "storageBucket": "binarywards.appspot.com",
@@ -24,41 +24,52 @@ firebase = pyrebase.initialize_app(config)
 
 db = firebase.database()
 
-db.child("users")
-db.child("companies")
-db.child("campaigns")
-db.child("ussd_sessions")
-
 
 # create user
 def create_user(phone, password, fullname, email):
-    db.child("users").child("p" + phone).child("details").set(dict(password=password, name=fullname, email=email))
+    password = utils.sha256(password)
+    if utils.validate_phone(phone):
+        phone = "254" + phone[(len(phone) - 9):len(phone)]
+        db.child("app").child("users").child(phone).child("details").set(dict(password=password, name=fullname, email=email))
+        return True
+    else:
+        return False
 
 
-# email, phone_number, password, name, use_code
-def create_company(email, phone_number, password, name, use_code):
-    db.child("companies").child(use_code).child("details").set(dict(
-        email=email, password=password, name=name, phone=phone_number
+# email, phone_number, password, name, company_code
+def create_company(email, phone_number, password, name, company_code):
+    password = utils.sha256(password)
+    db.child("app").child("companies").child(company_code).child("details").set(dict(
+        email=email, password=password, name=name, phone=phone_number, balance=0
     ))
 
 
-# use_code, campaign_name, details, campaign_code, custom_message, reward-type
-def create_campaign(use_code, campaign_name, campaign_code, message, custom_message, details,
-                    callback, reward_calls, reward_type=''):
-    db.child("companies").child(use_code).child("campaigns").child(campaign_code).set(dict(
+# company_code, campaign_name, details, campaign_code, token_type['refer', 'stored'], custom_message,
+# token_type, callback, token_call, token_type
+def create_campaign(company_code, campaign_name, campaign_code, message, custom_message, details,
+                    callback, token_call, token_type=''):
+    db.child("app").child("companies").child(company_code).child("campaigns").child(campaign_code).set(dict(
         name=campaign_name, message=message, custom_message=custom_message, details=details
     ))
-    db.child("campaigns").child(campaign_code).set(dict(
-        company=use_code, reward_type=reward_type, reward_calls=reward_calls, callback=callback
+    db.child("app").child("campaigns").child(campaign_code).set(dict(
+        company=company_code, token_type=token_type, token_call=token_call, callback=callback
     ))
 
 
 # prize_type, prize_amount, winner, delivered, delivery_id
-def add_campaign_data(use_code, campaign_code, redemption_code, prize_type, prize_amount, winner, delivered,
-                      delivery_id):
-    db.child("companies").child(use_code).child("campaigns"). \
-        child(campaign_code).child("prizes").child(redemption_code).set(dict(
-            prize_type=prize_type, prize_amount=prize_amount, winner=winner,
-            delivered=delivered, delivery_id=delivery_id
-    ))
+def add_campaign_data(company_code, campaign_code, redemption_code, prize_type, prize_amount, winner):
+    db.child("app").child("companies").child(company_code).child("campaigns"). \
+        child(campaign_code).child("tokens").child(redemption_code).set(dict(
+            prize_type=prize_type, prize_amount=prize_amount, redeemed=False
+        ))
 
+
+def record_reward(company_code, campaign_code, delivered, delivery_id, winner, redemption_code, prize_type, amount):
+    db.child('app').child('companies').child(company_code).child('campaigns').\
+        child(campaign_code).child('tokens').child(redemption_code).update(dict(
+            winner=winner, delivered=delivered, delivery_id=delivery_id, redeemed=True, time=utils.human_date()
+        ))
+    db.child('app').child('users').child(winner).child('rewards').push(dict(
+        company=company_code, campaign=campaign_code, delivery_id=delivery_id, delivered=delivered,
+        code=redemption_code, time=utils.human_date(), prize_type=prize_type, amount=amount
+    ))
