@@ -73,3 +73,8 @@ def record_reward(company_code, campaign_code, delivered, delivery_id, winner, r
         company=company_code, campaign=campaign_code, delivery_id=delivery_id, delivered=delivered,
         code=redemption_code, time=utils.human_date(), prize_type=prize_type, amount=amount
     ))
+
+
+def add_custom_token(token, prize_type, amount):
+    # redemption_code, prize_type, prize_amount
+    db.child('app').child('custom_codes').child(token).set(dict(prize_type=prize_type, prize_amount=amount))

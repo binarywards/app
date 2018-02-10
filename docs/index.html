@@ -88,7 +88,7 @@
                     </div>
                 </div>
                 <div class="col s12 l12 m12">
-                    <button type="submit" class="btn btn-large white-text amber darken-4 waves-effect waves-light"
+                    <button type="submit" class="btn white-text amber darken-4 waves-effect waves-light"
                             id="btn_redeem"> Redeem Points
                     </button>
                 </div>
@@ -416,7 +416,7 @@
             onOpen: function (el) { /* Do Stuff */
             }, // A function to be called when sideNav is opened
             onClose: function (el) { /* Do Stuff */
-            }, // A function to be called when sideNav is closed
+            } // A function to be called when sideNav is closed
         }
     );
     $(document).ready(function () {
@@ -434,8 +434,8 @@
         }
     }
     function displayCampaignRegistration (){
-        let registration = document.querySelector('#campaign_registration');
-        let view = document.querySelector('#read_campaign');
+        var registration = document.querySelector('#campaign_registration');
+        var view = document.querySelector('#read_campaign');
         if (registration.classList.contains('d-none')){
             view.classList.add('d-none');
             registration.classList.remove('d-none');

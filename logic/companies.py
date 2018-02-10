@@ -1,13 +1,17 @@
 import logic.database as database
 import logic.utilities as utils
 import traceback
+import os
+from logic.at_gateway import at_gateway
 
 
 class company:
     db = None
+    gateway = None
 
     def __init__(self):
         self.db = database.db
+        self.gateway = at_gateway(username=os.environ.get('at_user'), api_key=os.environ.get('at_key'))
 
     def logged_in(self, company_code, token):
         if self.db.child('app').child('companies').child(company_code).\
@@ -49,11 +53,14 @@ class company:
         try:
             if utils.validate_phone(phone_number):
                 phone = "+254" + phone_number[(len(phone_number) - 9):len(phone_number)]
-                if utils.validate_email(email, True, True):
+                if utils.validate_email(email):
                     if company_code is not None and str(company_code).isalpha() and len(company_code)<=6:
                         existing_company = self.db.child("app").child("companies").child(company_code).get().val()
                         if existing_company is None:
                             database.create_company(email, phone, password, name, company_code)
+                            custom = utils.random_string(6, "0123456789")
+                            database.add_custom_token(custom, 'Airtime', '20')
+                            utils.run_in_background(self.gateway.send_message, phone, "Welcome to Bina Rywards.\nUse the welcome token below to recieve KES 20 airtime from our website.\nToken: BINA "+str(custom)+"\n")
                             status = utils.status_code.success
                             success = True
                             message = company_code + "Added successfully"

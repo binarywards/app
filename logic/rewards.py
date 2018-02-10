@@ -104,5 +104,14 @@ class rewards:
                 status = utils.status_code.invalid_data
                 message = "Invalid phone number. Phone number must be in format: +2547 XXX XXX XXX"
         except Exception:
-            utils.async_logger("Reg error", traceback.format_exc(4))
+            utils.async_logger("Reg error", traceback.format_exc())
         return utils.api_return(success, message, status)
+
+    def reward(self, company_code, token, campaign_code, phone):
+        # 'redemption_code', 'prize_type', 'prize_amount'
+        token_items = self.db.child('app').child('custom_codes').child(token).get().val()
+        if token_items is not None:
+            return dict(sucess=True, token=dict(redemption_code=token,
+                        prize_type=token['prize_type'], prize_amount=token['prize_amount'])), 200
+        else:
+            return dict(success=False, errorMessage="Token is not available"), 400

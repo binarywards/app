@@ -1,9 +1,9 @@
 /* script to manipulate the interface events*/
-let ajax = function (options) {
+var ajax = function (options) {
     function setDefaultVal(value, defaultValue){
         return (value === undefined) ? defaultValue : value;
     }
-    let settings = {
+    var settings = {
         url: setDefaultVal(options.url, ""),
         type: setDefaultVal(options.type, "GET"),
         headers: setDefaultVal(options.headers, {}),
@@ -18,7 +18,7 @@ let ajax = function (options) {
     };
     // Can implement multiple methods of Ajax
     if(Window.fetch) {
-        let data = new FormData();
+        var data = new FormData();
         if (settings.data !== undefined) {
             Object.keys(settings.data).forEach(function (key) {
                 data.append(key, settings.data[key]);
@@ -29,14 +29,14 @@ let ajax = function (options) {
             if (response.status >= 200 && response.status < 300) {
                 return response
             } else {
-                let error = new Error(response.statusText);
+                var error = new Error(response.statusText);
                 error.response = response;
                 throw error;
             }
         }
 
         function parseData(response) {
-            let type = response.headers.get('Content-Type');
+            var type = response.headers.get('Content-Type');
             if (settings.dataType === "json" || type.index("json") >= 0) {
                 return response.json();
             } else {
@@ -53,17 +53,29 @@ let ajax = function (options) {
     }
 };
 
-let server = "https://binarywards.herokuapp.com/"
+var server = "https://binarywards.herokuapp.com/"
 
-let toast = function (message) {
+var toast = function (message) {
     Materialize.toast(message, 6000)
 };
 
-let redeem_code = function () {
-    let phone = document.querySelector('#phoneNumber').value;
-    let code = document.querySelector('#redemptionCode').value;
-    ajax({
-        url: server+"api/redeem",
+
+var start_loading = function () {
+    if(document.querySelector("#preloader").classList.contains('d-none')){
+        document.querySelector("#preloader").classList.remove('d-none');
+    }
+};
+
+var stop_loading = function () {
+    document.querySelector("#preloader").classList.add('d-none');
+};
+
+var redeem_code = function () {
+    start_loading();
+    var phone = document.querySelector('#phoneNumber').value;
+    var code = document.querySelector('#redemptionCode').value;
+    $.ajax({
+        url: "api/redeem_token",
         type: "POST",
         data: {
             redemptionCode: code,
@@ -72,48 +84,62 @@ let redeem_code = function () {
         dataTye: "json",
         success: function (response) {
             // Process your data here e.g:
-            let success = response['success']
+            var success = response['success'];
+            var message = response['message'];
+            console.log(message);
             if (success) {
-                let message = response['message'];
                 toast(message)
             } else {
-                let message = response.message;
                 toast(message)
             }
-
+            stop_loading();
+        },
+        error: function (error) {
+            console.log();
+            toast(error.responseJSON.message);
+            stop_loading();
         }
     });
 };
 
 function signUp() {
-
-    let companyCode = document.querySelector('#companyCode').value;
-    let companyName = document.querySelector('#companyName').value;
-    let companyEmail = document.querySelector('#email').value;
-    let companyPhone = document.querySelector('#companyPhone').value;
-    let password = document.querySelector('#registerPassword').value;
+    start_loading();
+    var companyCode = document.querySelector('#companyCode').value;
+    var companyName = document.querySelector('#companyName').value;
+    var companyEmail = document.querySelector('#email').value;
+    var companyPhone = document.querySelector('#companyPhone').value;
+    var password = document.querySelector('#registerPassword').value;
     ajax({
-        url: server+"api/company_add",
+        url: "api/company_add",
         type: "POST",
         data: {
             company_code: companyCode,
             name: companyName,
-            email:companyEmail,
-            phone_number:companyPhone,
-            password:password
+            email: companyEmail,
+            phone_number: companyPhone,
+            password: password
         },
         dataTye: "json",
         success: function (response) {
-            let success = response['success'];
+            var success = response['success'];
+            var message = response['message'];
             if (success) {
-                let message = response['message'];
-                toast(message);
+                toast("Company added successfully");
             } else {
-                let message = response.message;
                 toast(message);
             }
+            stop_loading();
+        },
+        error: function (error) {
+            console.log(error.responseText);
+            toast("An error occurred");
+            stop_loading();
         }
 
     });
 
-};
+}
+
+function logIn() {
+
+}

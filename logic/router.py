@@ -46,6 +46,13 @@ def actions():
             "parameters": ['company_code', 'campaign_name', 'campaign_code', 'message', 'custom_message', 'details', 'callback', 'token_call', 'token_type'],
             "headers": [],
             "function": comp.add_campaign
+        },
+        "our_rewards_call": {
+            "description": "Will check if a specified token exists in our system",
+            "method": "POST",
+            "parameters": ['company_code', 'token', 'campaign_code', 'phone'],
+            "headers": [],
+            "function": reward.reward
         }
     }
 

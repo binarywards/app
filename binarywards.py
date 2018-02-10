@@ -15,6 +15,7 @@ app = Flask(__name__, static_folder='docs', template_folder='docs')
 app.config['SECRET_KEY'] = utils.random_string(16)
 socketio = SocketIO(app)
 actions = router.actions()
+print(actions)
 help_actions = {}
 for key in actions.keys():
     action = actions[key]
@@ -102,6 +103,7 @@ def api_actions(api_action):
         "success": False,
         "message": "Use POST for action "+api_action+" and provide all the parameters as in the key params and headers."
     }
+    actions = router.actions()
     try:
         if api_action in actions:
             params = actions[api_action]["parameters"]
