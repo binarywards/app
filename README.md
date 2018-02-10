@@ -16,7 +16,7 @@
 |api/user_update|PUT|user_id, key, value|Update details of a user account|No|
 |api/user_remove|DELETE|user_id|Delete a user|No|
 |api/companies|GET| |Returns a list of all registered organisations|
-|api/company_add|POST|name, user_name, email, password, phone|Registers a new organisation|
+|api/company_add|POST|email, phone_number, password, name, company_code|Registers a new organisation|
 |api/company_details|GET|user_name|Get details of a specific company|
 |api/company_update|PUT|user_name, key, value|Update details of a company|
 |api/company_campaigns|GET|user_name|List of rewards offered by an organisation|

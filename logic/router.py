@@ -4,13 +4,14 @@ Take's api routes and resolves them to the right functions with their responses
 
 from logic.users import users
 from logic.rewards import rewards
-
+from logic.companies import company
 
 def actions(socketio):
     user = users()
     reward = rewards()
+    comp = company()
     return {
-        "user_register": {
+        "user_add": {
             "description": "Registers a new user",
             "method": "POST",
             "parameters": ["phone", "email", "password", "username"],
@@ -30,6 +31,13 @@ def actions(socketio):
             "parameters": ['redemptionCode', 'phoneNumber'],
             "headers": [],
             "function": reward.redeem
+        },
+        "company_add": {
+            "description": "Registers a new organization",
+            "method": "POST",
+            "parameters": ['email', 'phone_number', 'password', 'name', 'company_code'],
+            "headers": [],
+            "function": comp.register_company
         }
     }
 
