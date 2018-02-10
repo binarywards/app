@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
     <title>Bina Rywards</title>
@@ -26,39 +26,373 @@
     <li style="padding: 5px">
         <div class="row" style="padding: 0 !important; border: 2px solid #ffffff;">
             <input type="search" placeholder="Search here..." id="search_box" class="col s10 white-text">
-            <a href="#search" id="search_btn" class="col s2 btn amber-text text-darken-4 white"><i class="fa fa-search"></i></a>
+            <a href="#search" id="search_btn" class="col s2 btn amber-text text-darken-4 white"><i
+                    class="fa fa-search"></i></a>
             <div id="search-results">
 
             </div>
         </div>
     </li>
 
-    <li class="menu active"><a href="#" class="white-text" onclick="page(this.hash)"><i
-            class="fa fa-home white-text"></i> Home</a></li>
-    <li class="menu"><a href="#" class="white-text" onclick="page(this.hash)"><i class="fa fa-info white-text"></i>
+    <li class="menu active"><a href="#home" class="white-text" onclick="switch_page(this.hash)">
+        <i class="fa fa-home white-text"></i> Home</a></li>
+    <li class="menu"><a href="#" class="white-text" onclick="switch_page(this.hash)"><i
+            class="fa fa-info white-text"></i>
         About</a></li>
-    <li class="menu"><a href="#" class="white-text" onclick="page(this.hash)"><i
+    <li class="menu"><a href="#" class="white-text" onclick="switch_page(this.hash)"><i
             class="fa fa-phone white-text"></i> Contact</a></li>
-    <li class="menu"><a href="#" class="white-text" onclick="page(this.hash)"><i class="fa fa-question white-text"></i>
+    <li class="menu"><a href="#" class="white-text" onclick="switch_page(this.hash)"><i
+            class="fa fa-question white-text"></i>
         FAQ</a></li>
 </ul>
 <a href="#" style="margin: 20px 10px; top: 0px; right: 0px; position: absolute;" data-activates="side-bar"
-       class="button-collapse top-nav waves-effect waves-light circle hide-on-large-only amber darken-4 btn btn-floating"><i
-            class="fa fa-navicon"></i></a>
+   class="button-collapse top-nav waves-effect waves-light circle hide-on-large-only amber darken-4 btn btn-floating"><i
+        class="fa fa-navicon"></i></a>
 
 <div id="preloader" class="progress amber darken-4">
     <div class="indeterminate white"></div>
 </div>
-<div class="content" id="home" style="display: flex; align-items: center; justify-content: center;">
+<div class="content center-all" id="home">
     <div class="center amber-text text-darken-4">
         <h1 class="">Welcome to Bina Rywards</h1>
         <p class="flow-text">Choose your type of profile to continue:</p>
         <div>
-            <a class="btn amber darken-4 white-text waves-effect waves-light">Standard Login</a>
-            <a class="btn amber darken-4 white-text waves-effect waves-light">Company Login</a>
+            <button class="btn amber darken-4 white-text waves-effect waves-light"
+                    onclick="switch_page('#redeem_code')">Redeem Code
+            </button>
+            <button class="btn amber darken-4 white-text waves-effect waves-light"
+                    onclick="switch_page('#company_login')">Company Login
+            </button>
         </div>
     </div>
 </div>
+<div class="content center-all d-none" id="redeem_code">
+    <div class="center">
+        <h2 class="amber-text text-darken-4">Claim your reward</h2>
+        <h6 class="amber-text text-darken-4"> Fill in the fields below to redeem your points</h6>
+        <div class="row">
+            <div class="row" id="redeem_message"></div>
+            <form class="col s12" action="javascript:{ redeem_code(); }">
+                <div class="row">
+                    <div class="input-field col s12">
+                        <i class="fa fa-gift prefix amber-text text-darken-4"></i>
+                        <input id="redemptionCode" type="text" class="validate">
+                        <label for="redemptionCode">Reward Code</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12">
+                        <i class="fa fa-phone prefix amber-text text-darken-4"></i>
+                        <input id="phoneNumber" type="tel" class="validate">
+                        <label for="phoneNumber">Phone Number</label>
+                    </div>
+                </div>
+                <div class="col s12 l12 m12">
+                    <button type="submit" class="btn btn-large white-text amber darken-4 waves-effect waves-light"
+                            id="btn_redeem"> Redeem Points
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="content d-none" id="company_login">
+    <div class="card">
+        <div class="card-content">
+            <h5 class="center amber-text text-darken-4">Register a new company or login if you already have an
+                account</h5>
+        </div>
+        <div class="card-tabs">
+            <ul class="tabs tabs-fixed-width">
+                <li class="tab"><a href="#signup">Sign up</a></li>
+                <li class="tab"><a class="active" href="#signin">Sign in</a></li>
+
+            </ul>
+        </div>
+        <div class="card-content white lighten-4">
+            <div id="signup" class="amber-text text-darken-4">
+                <h6>Fill the fields below to register</h6>
+                <div class="row">
+                    <form class="col s12">
+                        <div class="row">
+                            <div class="input-field col s12 m6 l6">
+                                <i class="fa fa-address-book prefix amber-text text-darken-4"></i>
+                                <input id="companyCode" type="text" class="validate">
+                                <label for="companyCode">Company Code eg BINA</label>
+                            </div>
+                            <div class="input-field col s12 m6 l6">
+                                <i class="fa fa-industry prefix amber-text text-darken-4"></i>
+                                <input id="companyName" type="tel" class="validate">
+                                <label for="companyName">Company Name eg. Binarywards</label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="input-field col s12 m6 l6">
+                                <i class="fa fa-envelope prefix amber-text text-darken-4"></i>
+                                <input id="email" type="text" class="validate">
+                                <label for="email">Email Address </label>
+                            </div>
+                            <div class="input-field col s12 m6 l6">
+                                <i class="fa fa-phone prefix amber-text text-darken-4"></i>
+                                <input id="companyPhone" type="tel" class="validate">
+                                <label for="companyPhone">Telephone Number</label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="input-field col s12 m6 l6">
+                                <i class="fa fa-file-text prefix amber-text text-darken-4"></i>
+                                <input id="registerPassword" type="text" class="validate">
+                                <label for="registerPassword">Password</label>
+                            </div>
+                        </div>
+                        <div class="center">
+                            <button class="btn btn-large white-text amber darken-4 waves-effect waves-light"
+                                    id="btn_signup" onclick="signUp()"> Create Account
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div id="signin" class="amber-text text-darken-4">
+                <div class="row ">
+                    <form class="col s12">
+                        <div class="row">Below credentials required to login</div>
+
+                        <div class="row ">
+                            <div class="input-field col s12 l12 m12">
+                                <i class="fa fa-address-card-o prefix amber-text text-darken-4"></i>
+                                <input id="usercode" type="text" class="validate">
+                                <label for="usercode">Company Code</label>
+                            </div>
+                        </div>
+                        <div class="row ">
+                            <div class="input-field col s12 m12 l12">
+                                <i class="fa fa-file-text-o prefix amber-text text-darken-4"></i>
+                                <input id="password" type="password" class="validate amber-text darken-4">
+                                <label for="password">Password</label>
+                            </div>
+                        </div>
+                        <div class="center">
+                            <button type="button"
+                                    class=" center btn btn-large white-text amber darken-4 waves-effect waves-light"
+                                    id="btn_login" onclick="switch_page('#dashboard')"> Sign In
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<div class="content amber-text text-darken-4 d-none center-all" id="dashboard">
+    <div class="row" style="min-width: 80%;">
+        <div class="col s12">
+            <div class="card white amber-text darken-4">
+                <div class="card-content amber-text text-darken-4">
+                    <h4 class="card-title center"><i class="fa fa-industry"></i>Company Name</h4>
+                    <div class="row center-all">
+                        <div class="col"><a class="waves-effect waves-light btn-large amber darken-4"
+                                            onclick="switch_page('#display_campaign')"><i
+                                class="fa fa-plus-square left"></i>Campaigns</a></div>
+                        <div class="col"><a class="waves-effect waves-light btn-large amber darken-4 "><i
+                                class="fa fa-credit-card left"></i>Load Account</a></div>
+                    </div>
+                    <div class="row">
+                        <h4 class="col s6 right-align"><i class="fa fa-credit-card-alt"></i> Balance: </h4>
+                        <h4 class="col s6 left-align">KES 1200</h4>
+                    </div>
+                    <ul class="collapsible" data-collapsible="accordion">
+                        <li>
+                            <div class="collapsible-header"><i class="fa fa-address-card-o"></i>Company profile</div>
+                            <div class="collapsible-body">
+                                <form>
+                                <p>Company Name: <span> </span></p>
+                                <p>Company Code:<span></span></p>
+                                <p>Email Address: <span></span></p>
+                                <p>Telephone: <span> </span></p>
+
+                                <p>Change Password</p>
+                                </form>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="collapsible-header"><i class="fa fa-history"></i>Account History</div>
+                            <div class="collapsible-body">
+                                <ul class="collection">
+                                    <li></li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                    <div class="col s12 center">
+                        <button class=" btn amber darken-4 white-text"> Logout</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+
+<div class="content d-none" id="display_campaign">
+    <div class="row flex">
+        <div class="col s12 m4 amber darken-4 row">
+            <h5 class="col s10 white-text">Campaigns</h5>
+            <h5 class="col s2 white waves-effect waves-orange center-align"
+                style="height: 48px; padding-top: 10px; margin: 0!important; border-bottom: 1px solid #ff6f00;"><i
+                    class="fa fa-plus amber-text text-darken-4" title="click to add a new campaign"
+                    onclick="displayCampaignRegistration()"></i></h5>
+        </div>
+        <div class="col s12 m8 amber darken-4 row">
+            <h5 class="center white-text">Company Name</h5>
+        </div>
+        <div class="col s12 m4" style="border-right: 1px solid #ff6f00;">
+            <div class="amber-text text-darken-4">
+                <ul class="collection">
+                    <li class="collection-item"><a class="amber-text text-darken-4" href="#">Buy one get one free</a>
+                    </li>
+                    <li class="collection-item active"><a class="white-text text-darken-4" href="#">Shabiki Reloads</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="col s12 m8 amber-text text-darken-4">
+            <div class="row " id="campaign_registration">
+                <h5 class="col s12 center">New Campaign</h5>
+                <form class="col s12">
+                    <div class="row flex">
+                        <div class="input-field col s12 m6 l6">
+                            <i class="fa fa-newspaper-o prefix amber-text text-darken-4"></i>
+                            <input id="campaignName" type="text" class="validate">
+                            <label for="campaignName">Campaign Name</label>
+                        </div>
+                        <div class="input-field col s12 m6 l6">
+                            <i class="fa fa-address-book prefix amber-text text-darken-4"></i>
+                            <input id="campaignCode" type="text" class="validate">
+                            <label for="campaignCode">Campaign Code eg BINA001</label>
+                        </div>
+                        <div class="input-field col s12">
+                            <i class="fa fa-file-text-o prefix amber-text text-darken-4"></i>
+                            <textarea id="message" type="text" class="validate materialize-textarea"></textarea>
+                            <label for="message">Message (To be sent on success)</label>
+                        </div>
+                        <div class="input-field col s12">
+                            <i class="fa fa-file-text prefix amber-text text-darken-4"></i>
+                            <textarea id="customMessage" type="text" class="validate materialize-textarea"></textarea>
+                            <label for="customMessage">Custom Message (To be sent on custom reward)</label>
+                        </div>
+                        <div class="input-field col s12">
+                            <i class="fa fa-file prefix amber-text text-darken-4"></i>
+                            <textarea id="description" type="text" class="validate materialize-textarea"></textarea>
+                            <label for="description">Description (A description of the campaign) </label>
+                        </div>
+                        <div class="input-field col s12">
+                            <i class="fa fa-external-link prefix amber-text text-darken-4"></i>
+                            <input id="callBack" type="text" class="validate">
+                            <label for="callBack">Call back URL(We'll send a post request after redemption)</label>
+                        </div>
+                        <div class="input-field col s12">
+                            <i class="fa fa-link prefix amber-text text-darken-4"></i>
+                            <input id="rewardCalls" type="tel" class="validate">
+                            <label for="rewardCalls">Reward Url(To be called in case you want to provide custom
+                                tokens)</label>
+                        </div>
+                        <div class="input-field col s12">
+                            <i class="fa fa-gift prefix amber-text text-darken-4"></i>
+                            <select id="rewardType">
+                                <option>Refer (We will be confirming the code from your server)</option>
+                                <option>Stored (We will save the data in our database)</option>
+                            </select>
+                            <label for="rewardType">Reward Type eg Free airtime, electronics</label>
+                        </div>
+                        <div class="col s12 center">
+                            <button class="btn waves-effect waves-light amber darken-4"><i class="fa fa-plus left"></i>Add
+                                Campaign
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="row d-none" id="read_campaign" >
+                <div class="card-content amber-text text-darken-4 col s12">
+                    <h3 class="card-title center">Campaign Name</h3>
+                    <h4 class="center">Amount</h4>
+                    <ul class="collapsible" data-collapsible="accordion">
+                        <li>
+                            <div class="collapsible-header">Campaign Details</div>
+                            <div class="collapsible-body">
+                                <div class="row">
+                                    <form class="col s12">
+                                        <div class="row">
+                                            <div class="input-field col s12">
+                                                <input value="" id="campaignDisplayCode" type="text" class="validate">
+                                                <label for="campaignDisplayCode">Campaign code</label>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="input-field col s12">
+                                                <input value="" id="campaignMessage" type="text" class="validate">
+                                                <label for="campaignMessage">Campaign Message</label>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="input-field col s12">
+                                                <input value="" id="campaignCustomMessage" type="text" class="validate">
+                                                <label for="campaignCustomMessage">Campaign Custom Message</label>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="input-field col s12">
+                                                <input value="" id="campaignDescription" type="text" class="validate">
+                                                <label for="campaignDescription">Campaign Description</label>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="input-field col s12">
+                                                <input value="" id="campaignCallbackUrl" type="text" class="validate">
+                                                <label for="campaignCallbackUrl">Campaign Callback Url</label>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="input-field col s12">
+                                                <input value="" id="campaignRewardCalls" type="text" class="validate">
+                                                <label for="campaignRewardCalls">Campaign Reward Calls</label>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="input-field col s12">
+                                                <input value="" id="campaignRewardType" type="text" class="validate">
+                                                <label for="campaignRewardType">Campaign Reward Type</label>
+                                            </div>
+                                        </div>
+
+                                    </form>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="collapsible-header">Token Details</div>
+                            <div class="collapsible-body">
+                            <div class="row">
+
+                            </div>
+                                <div class="row s12">
+                                    <div class="col s12"><i class="fa fa-history"></i> Tokens history </div>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
 <footer class="page-footer">
     <div class="footer-copyright amber white-text darken-4 center" style="margin-top: -20px;">
         <div class="container semi-bold">
@@ -67,9 +401,12 @@
     </div>
 </footer>
 
+
 <!--Import jQuery before materialize.js-->
 <script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
 <script type="text/javascript" src="js/materialize.min.js"></script>
+<script type="text/javascript" src="js/actions.js"></script>
+
 <script>
     $('.button-collapse').sideNav({
             menuWidth: 300, // Default is 300
@@ -82,7 +419,30 @@
             }, // A function to be called when sideNav is closed
         }
     );
+    $(document).ready(function () {
+        $('select').material_select();
+    });
+
+    function switch_page(id) {
+        document.querySelector('#home').classList.add('d-none');
+        document.querySelector('#company_login').classList.add('d-none');
+        document.querySelector('#redeem_code').classList.add('d-none');
+        document.querySelector('#display_campaign').classList.add('d-none');
+        document.querySelector('#dashboard').classList.add('d-none');
+        if (document.querySelector(id).classList.contains('d-none')) {
+            document.querySelector(id).classList.remove('d-none');
+        }
+    }
+    function displayCampaignRegistration (){
+        let registration = document.querySelector('#campaign_registration');
+        let view = document.querySelector('#read_campaign');
+        if (registration.classList.contains('d-none')){
+            view.classList.add('d-none');
+            registration.classList.remove('d-none');
+        }
+    }
 </script>
+
 <script>
     document.querySelector("#preloader").classList.add('d-none');
 </script>
