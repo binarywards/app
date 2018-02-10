@@ -14,7 +14,9 @@ try:
         "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
         "client_x509_cert_url": os.environ.get('cert_url', "this will fail")
     }, indent=4, separators=(',', ': '))
-    file = open(os.path.dirname(os.path.realpath(__file__))+"/binarywards-59e2153bd029.json", "w+")
+    path = os.path.dirname(os.path.realpath(__file__))+"/binarywards-59e2153bd029.json"
+    print("Writing to: "+ path)
+    file = open(path, "w+")
     file.write(data+"\n")
     file.close()
 except Exception:
