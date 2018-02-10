@@ -9,6 +9,39 @@ class company:
     def __init__(self):
         self.db = database.db
 
+    def logged_in(self, company_code, token):
+        if self.db.child('app').child('companies').child(company_code).\
+                        child('logins').child(token).get().val() is not None:
+            return True
+        else:
+            return False
+
+    def company_login(self, company_code, password):
+        status = utils.status_code.system_error
+        message = "Unknown error occurred, please retry"
+        success = False
+        try:
+            company = self.db.child('app').child('companies').child(company_code).child('details').get().val()
+            if company is not None:
+                password = utils.sha256(password)
+                if company['password'] == password:
+                    # Generate a token
+                    token = utils.random_string(16)
+                    self.db.child('app').child('companies').child(company_code).\
+                        child('logins').child(token).set(dict(time=utils.human_date()))
+                    message = token
+                    status = utils.status_code.success
+                    success = True
+                else:
+                    status = utils.status_code.forbidden
+                    message = "Wrong password"
+            else:
+                message = "Company does not exist"
+                status = utils.status_code.not_found
+        except Exception:
+            utils.async_logger("Company Login error", traceback.format_exc(4))
+        return utils.api_return(success, message, status)
+
     def register_company(self, email, phone_number, password, name, company_code):
         status = utils.status_code.system_error
         message = "Unknown error occurred, please retry"
@@ -38,15 +71,83 @@ class company:
                 message = "Invalid phone number, use the format 2547 XXX XXX XXX"
         except Exception as e:
             utils.async_logger("Error registering company", str(e))
-        utils.api_return(success, message, status)
+        return utils.api_return(success, message, status)
 
     def add_campaign(self, company_code, campaign_name, campaign_code, message, custom_message, details,
-                    callback, token_call, token_type):
+                    callback, token_call, token_type, token):
+        status = utils.status_code.system_error
+        camp_message = message
+        message = "Unknown error occurred, please retry"
+        success = False
+        try:
+            if self.logged_in(company_code, token):
+                current = self.db.child('app').child('campaigns').child(campaign_code).get().val()
+                if current is None:
+                    if self.db.child('app').child('companies').child(company_code).get().val() is not None:
+                        database.create_campaign(company_code,
+                                                 campaign_name, campaign_code, camp_message, custom_message, details, callback,
+                                                 token_call, token_type)
+                        message = "Campaign " + str(campaign_name) + "Added successfully"
+                        success = True
+                        status = utils.status_code.success
+                    else:
+                        status = utils.status_code.not_found
+                        message = "Company does not exist"
+                else:
+                    status = utils.status_code.forbidden
+                    message = "Campaign already exist"
+            else:
+                status = utils.status_code.forbidden
+                message = "Invalid authentication code"
+        except Exception:
+            utils.async_logger("Error adding campaign", traceback.format_exc(4))
+        return utils.api_return(success, message, status)
+
+    def read_campaigns(self, company_code, token):
+        success = False
+        message = "Unknown error occurred"
+        status = utils.status_code.system_error
+        try:
+            if self.logged_in(company_code, token):
+                if self.db.child('app').child('companies').child(company_code).get().val() is not None:
+                    campaigns = self.db.child('app').child('companies').child(company_code).child('campaigns').get().val()
+                    if campaigns is None:
+                        campaigns = dict()
+                    message = campaigns
+                    success = True
+                    status = utils.status_code.success
+                else:
+                    message = "Company does not exist"
+            else:
+                status = utils.status_code.forbidden
+                message = "Invalid authentication code"
+        except Exception:
+            utils.async_logger("Error reading campaigns", traceback.format_exc())
+        return utils.api_return(success, message, status)
+
+    def read_campaign(self, company_code, campaign_code, token):
         status = utils.status_code.system_error
         message = "Unknown error occurred, please retry"
         success = False
         try:
-            pass
+            if self.logged_in(company_code, token):
+                current = self.db.child('app').child('campaigns').child(campaign_code).get().val()
+                if current is not None:
+                    if self.db.child('app').child('companies').child(company_code).get().val() is not None:
+                        campaigns = self.db.child('app').child('companies').child(company_code).\
+                            child('campaigns').child(campaign_code).get().val()
+                        message = campaigns
+                        success = True
+                        status = utils.status_code.success
+                    else:
+                        status = utils.status_code.not_found
+                        message = "Company does not exist"
+                else:
+                    status = utils.status_code.not_found
+                    message = "Campaign not found"
+            else:
+                status = utils.status_code.forbidden
+                message = "Invalid authentication code"
         except Exception:
             utils.async_logger("Error adding campaign", traceback.format_exc(4))
         return utils.api_return(success, message, status)
