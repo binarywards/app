@@ -1,5 +1,6 @@
 import logic.database as database
 import logic.utilities as utils
+import traceback
 
 
 class users:
@@ -31,8 +32,8 @@ class users:
             else:
                 status = utils.status_code.invalid_data
                 message = "Invalid phone number"
-        except Exception as e:
-            utils.async_logger("Reg error", str(e))
+        except Exception:
+            utils.async_logger("Reg error", traceback.format_exc())
         return utils.api_return(success, message, status)
 
     def login(self):
@@ -67,6 +68,6 @@ class users:
             else:
                 status = utils.status_code.invalid_data
                 message = "Invalid phone number"
-        except Exception as e:
-            utils.async_logger("Reg error", str(e))
+        except Exception:
+            utils.async_logger("Reg error", traceback.format_exc(4))
         return utils.api_return(success, message, status)

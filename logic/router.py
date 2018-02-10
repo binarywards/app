@@ -6,7 +6,8 @@ from logic.users import users
 from logic.rewards import rewards
 from logic.companies import company
 
-def actions(socketio):
+
+def actions():
     user = users()
     reward = rewards()
     comp = company()
@@ -38,6 +39,13 @@ def actions(socketio):
             "parameters": ['email', 'phone_number', 'password', 'name', 'company_code'],
             "headers": [],
             "function": comp.register_company
+        },
+        "company_new_campaign": {
+            "description": "Adds a new campaign by an organization",
+            "method": "POST",
+            "parameters": ['company_code', 'campaign_name', 'campaign_code', 'message', 'custom_message', 'details', 'callback', 'token_call', 'token_type'],
+            "headers": [],
+            "function": comp.add_campaign
         }
     }
 

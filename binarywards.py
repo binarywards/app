@@ -2,6 +2,7 @@ from flask import Flask, redirect, request, Response, url_for, send_from_directo
 from flask_socketio import SocketIO, send, emit
 import json
 import os
+import traceback
 from logic.utilities import status_code
 import logic.utilities as utils
 import logic.router as router
@@ -11,7 +12,7 @@ data_sent = None
 app = Flask(__name__, static_folder='docs', template_folder='docs')
 app.config['SECRET_KEY'] = utils.random_string(16)
 socketio = SocketIO(app)
-actions = router.actions(socketio)
+actions = router.actions()
 help_actions = {}
 for key in actions.keys():
     action = actions[key]
@@ -127,8 +128,8 @@ def api_actions(api_action):
         else:
             status = status_code.not_found
             out["message"] = "Unknown action, please check: "+url_for("/api")
-    except Exception as e:
-        utils.async_logger("API action error:", str(e))
+    except Exception:
+        utils.async_logger("API action error:", traceback.format_exc(4))
         out["message"] = "An error occurred"
     return Response(dict_to_json(out), content_type="text/json"), status
 
@@ -185,8 +186,8 @@ def handle_json(data):
         else:
             status = status_code.not_found
             out["message"] = "Unknown action, please check: "+url_for("/api")
-    except Exception as e:
-        utils.async_logger("API action error:", str(e))
+    except Exception:
+        utils.async_logger("API action error:", traceback.format_exc())
         out["message"] = "An error occurred"
     out['action'] = action
     out['status'] = status

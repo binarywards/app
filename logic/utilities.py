@@ -7,6 +7,7 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from validate_email import validate_email
 import pendulum
+import traceback
 import threading
 
 
@@ -80,10 +81,13 @@ def send_email(recipient: str, recipient_name: str, subject: str, template: str,
         status = status_code.success
     except smtplib.SMTPException as e:
         message = "Error: Unable to send email: \n" + str(e)
+        async_logger("SMTP Exception", traceback.format_exc())
     except (ConnectionRefusedError, ConnectionResetError, ConnectionResetError, ConnectionError) as e:
         message = "Connection error: Email not sent: \n"+str(e)
+        async_logger("SMTP Exception", traceback.format_exc())
     except Exception as e:
         message = "Server Error: An error occurred: \n"+str(e)
+        async_logger("SMTP Exception", traceback.format_exc())
     return {
         "success": success,
         "message": message,

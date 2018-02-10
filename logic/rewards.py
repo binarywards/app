@@ -2,6 +2,7 @@ import logic.database as database
 import logic.utilities as utils
 from logic.at_gateway import at_gateway
 import os
+import traceback
 
 
 class rewards:
@@ -102,6 +103,6 @@ class rewards:
             else:
                 status = utils.status_code.invalid_data
                 message = "Invalid phone number. Phone number must be in format: +2547 XXX XXX XXX"
-        except Exception as e:
-            utils.async_logger("Reg error", str(e))
+        except Exception:
+            utils.async_logger("Reg error", traceback.format_exc(4))
         return utils.api_return(success, message, status)

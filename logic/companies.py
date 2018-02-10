@@ -1,5 +1,6 @@
 import logic.database as database
 import logic.utilities as utils
+import traceback
 
 
 class company:
@@ -20,6 +21,9 @@ class company:
                         existing_company = self.db.child("app").child("companies").child(company_code).get().val()
                         if existing_company is None:
                             database.create_company(email, phone, password, name, company_code)
+                            status = utils.status_code.success
+                            success = True
+                            message = company_code + "Added successfully"
                         else:
                             status = utils.status_code.forbidden
                             message = "Company code " + str(company_code) + " already exists"
@@ -36,3 +40,13 @@ class company:
             utils.async_logger("Error registering company", str(e))
         utils.api_return(success, message, status)
 
+    def add_campaign(self, company_code, campaign_name, campaign_code, message, custom_message, details,
+                    callback, token_call, token_type):
+        status = utils.status_code.system_error
+        message = "Unknown error occurred, please retry"
+        success = False
+        try:
+            pass
+        except Exception:
+            utils.async_logger("Error adding campaign", traceback.format_exc(4))
+        return utils.api_return(success, message, status)
