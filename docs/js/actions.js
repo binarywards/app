@@ -125,13 +125,15 @@ function signUp() {
             var message = response['message'];
             if (success) {
                 toast("Company added successfully");
+                toast(message);
             } else {
+                toast("Company added successfully");
                 toast(message);
             }
             stop_loading();
         },
         error: function (error) {
-            console.log(error.responseText);
+            toast(error.responseText);
             toast("An error occurred");
             stop_loading();
         }

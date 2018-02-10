@@ -60,7 +60,7 @@ class company:
                             database.create_company(email, phone, password, name, company_code)
                             custom = utils.random_string(6, "0123456789")
                             database.add_custom_token(custom, 'Airtime', '20')
-                            utils.run_in_background(self.gateway.send_message, phone, "Welcome to Bina Rywards.\nUse the welcome token below to recieve KES 20 airtime from our website.\nToken: BINA "+str(custom)+"\n")
+                            self.gateway.send_message(phone, "Welcome to Bina Rywards.\nUse the welcome token below to recieve KES 20 airtime from our website.\nToken: BINA "+str(custom)+"\n")
                             status = utils.status_code.success
                             success = True
                             message = company_code + "Added successfully"
