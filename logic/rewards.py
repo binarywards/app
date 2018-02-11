@@ -64,7 +64,7 @@ class rewards:
                                         message = str(company) + "Provided invalid prize parameters"
                                 else:
                                     status = utils.status_code.invalid_data
-                                    message = result["errorMessage"]
+                                    message = "Shit!"
                         else:
                             status = utils.status_code.not_implemented
                             message = "Unknown type of campaign provided"
@@ -112,7 +112,7 @@ class rewards:
         token_items = self.db.child('app').child('custom_codes').get().val()
         if token_items is not None:
             token_items = token_items[str(token)]
-            return dict(sucess=True, token=dict(redemption_code=token,
+            return dict(success=True, token=dict(redemption_code=token,
                         prize_type=token_items['prize_type'], prize_amount=token_items['prize_amount'])), 200
         else:
             return dict(success=False, errorMessage="Token is not available"), 400
