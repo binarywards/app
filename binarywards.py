@@ -62,12 +62,9 @@ def before_request():
         return redirect(location=url, code=status_code.redirect)
     global data_sent
     if request.headers.get('Content-Type') == "application/json":
-        print("Using form")
         data_sent = request.json
     else:
-        print("Using form")
         data_sent = request.form
-        print(data_sent)
 
 
 @app.route('/')
