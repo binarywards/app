@@ -14,11 +14,10 @@ data_sent = None
 app = Flask(__name__, static_folder='docs', template_folder='docs')
 app.config['SECRET_KEY'] = utils.random_string(16)
 socketio = SocketIO(app)
-actions = router.actions()
-print(actions)
+red_actions = router.actions()
 help_actions = {}
-for key in actions.keys():
-    action = actions[key]
+for key in red_actions.keys():
+    action = red_actions[key]
     action.pop("function")
     help_actions[key] = action
 
@@ -56,16 +55,19 @@ def handle_dict_par(params, data):
     return success, arguments
 
 
-# @app.before_request
+@app.before_request
 def before_request():
     if request.url.startswith('http://') and (not request.url.startswith('http://localhost')):
         url = request.url.replace('http://', 'https://', 1)
         return redirect(location=url, code=status_code.redirect)
     global data_sent
     if request.headers.get('Content-Type') == "application/json":
+        print("Using form")
         data_sent = request.json
     else:
+        print("Using form")
         data_sent = request.form
+        print(data_sent)
 
 
 @app.route('/')
@@ -169,6 +171,7 @@ def handle_json(data):
         "message": "Use POST for action " + api_action + " and provide all the parameters as in the key params and headers."
     }
     try:
+        actions = router.actions()
         if api_action in actions:
             params = actions[api_action]["parameters"]
             headers = actions[api_action]["headers"]
@@ -185,6 +188,7 @@ def handle_json(data):
                     out["message"] = "Action "+api_action+" is not yet implemented, come back soon"
             else:
                 status = status_code.invalid_data
+                print(params + headers)
                 out["message"] = "Please provide all the headers and parameters as " \
                                  "provided in key headers and params"
         else:
