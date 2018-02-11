@@ -56,7 +56,7 @@ def handle_dict_par(params, data):
     return success, arguments
 
 
-@app.before_request
+# @app.before_request
 def before_request():
     if request.url.startswith('http://') and (not request.url.startswith('http://localhost')):
         url = request.url.replace('http://', 'https://', 1)
