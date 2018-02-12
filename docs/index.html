@@ -486,6 +486,7 @@
         if(!company_logged_in() && (id==="#campaigns" || id==="#dashboard")){
             toast("You must be logged in to access this page");
             id = "#company_login";
+            full_path = id;
         }else if(id==="#campaigns" && split_path.length===2){
             if(split_path[1] === "new"){
                 new_campaign();
