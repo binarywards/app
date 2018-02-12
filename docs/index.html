@@ -40,21 +40,42 @@
         </div>
     </li>
 
-    <li class="menu active"><a href="#home" class="white-text" onclick="switch_page(this.hash)">
-        <i class="fa fa-home white-text"></i> Home</a></li>
-    <li class="menu"><a href="#about" class="white-text" onclick="switch_page(this.hash)"><i
-            class="fa fa-info white-text"></i>
-        About</a></li>
-    <li class="menu"><a href="#contact" class="white-text" onclick="switch_page(this.hash)"><i
-            class="fa fa-phone white-text"></i> Contact</a></li>
+    <li class="menu active">
+        <a href="#home" class="white-text" onclick="switch_page(this.hash)">
+            <i class="fa fa-home white-text"></i> Home
+        </a>
+    </li>
+    <li class="subheader company_logged">Company</li>
+    <li class="menu company_logged">
+        <a href="#dashboard" class="white-text" onclick="switch_page(this.hash)">
+            <i class="fa fa-info white-text"></i> Dashboard
+        </a>
+    </li>
+    <li class="menu company_logged">
+        <a href="#campaigns" class="white-text" onclick="switch_page(this.hash)">
+            <i class="fa fa-info white-text"></i> Campaigns
+        </a>
+    </li>
+    <li class="subheader">About us</li>
+    <li class="menu">
+        <a href="#about" class="white-text" onclick="switch_page(this.hash)">
+            <i class="fa fa-info white-text"></i> About
+        </a>
+    </li>
+    <li class="menu">
+        <a href="#contact" class="white-text" onclick="switch_page(this.hash)">
+            <i class="fa fa-phone white-text"></i> Contact
+        </a>
+    </li>
 </ul>
-<a href="#" style="margin: 20px 10px; top: 0; right: 0; position: fixed;" data-activates="side-bar"
+<a href="#" style="margin: 20px 10px; top: 0; right: 0; position: fixed; border: 1px solid white; z-index: 10000;" data-activates="side-bar"
    class="button-collapse top-nav waves-effect waves-light circle hide-on-large-only amber darken-4 btn btn-floating"><i
         class="fa fa-navicon"></i></a>
 
 <div id="preloader" class="progress amber darken-4">
     <div class="indeterminate white"></div>
 </div>
+
 <div class="content center-all" id="home">
     <div class="center amber-text text-darken-4">
         <img src="img/logo.png" class="profile-sm-md hide-on-large-only">
@@ -62,7 +83,7 @@
         <p class="flow-text">Choose your type of profile to continue:</p>
         <div>
             <button class="btn amber darken-4 white-text waves-effect waves-light"
-                    onclick="switch_page('#redeem_code')">Redeem Code
+                    onclick="switch_page('#redeem')">Redeem Code
             </button>
             <button class="btn amber darken-4 white-text waves-effect waves-light"
                     onclick="switch_page('#company_login')">Company Login
@@ -99,7 +120,7 @@
     </div>
 </div>
 
-<div class="content center-all d-none" id="redeem_code">
+<div class="content center-all d-none" id="redeem">
     <div class="center">
         <h2 class="amber-text text-darken-4">Claim your reward</h2>
         <h6 class="amber-text text-darken-4"> Fill in the fields below to redeem your points</h6>
@@ -180,7 +201,7 @@
         </div>
         <div id="signin" class="col s12 amber-text text-darken-4">
             <div class="row">
-                <form class="col s12">
+                <form class="col s12" action="javascript:{ logIn(); }">
                     <p class="flow-text center small">Enter your credentials required to login</p>
 
                     <div class="row ">
@@ -196,9 +217,9 @@
                         </div>
                     </div>
                     <div class="center">
-                        <button type="button"
+                        <button type="submit"
                                 class=" center btn white-text amber darken-4 waves-effect waves-light"
-                                id="btn_login" onclick="switch_page('#dashboard')"> Sign In
+                                id="btn_login"> Sign In
                         </button>
                     </div>
                 </form>
@@ -208,91 +229,92 @@
 </div>
 
 <div class="content amber-text text-darken-4 d-none center-all" id="dashboard">
-    <div class="row" style="min-width: 80%;">
-        <div class="col s12">
-            <div class="card white amber-text darken-4">
-                <div class="card-content amber-text text-darken-4">
-                    <h4 class="card-title center"><i class="fa fa-industry"></i>Company Name</h4>
-                    <div class="row center-all">
-                        <div class="col"><a class="waves-effect waves-light btn-large amber darken-4"
-                                            onclick="switch_page('#display_campaign')"><i
-                                class="fa fa-plus-square left"></i>Campaigns</a></div>
-                        <div class="col"><a class="waves-effect waves-light btn-large amber darken-4 "><i
-                                class="fa fa-credit-card left"></i>Load Account</a></div>
-                    </div>
-                    <div class="row">
-                        <h4 class="col s6 right-align"><i class="fa fa-credit-card-alt"></i> Balance: </h4>
-                        <h4 class="col s6 left-align">KES 1200</h4>
-                    </div>
-                    <ul class="collapsible" data-collapsible="accordion">
-                        <li>
-                            <div class="collapsible-header"><i class="fa fa-address-card-o"></i>Company profile</div>
-                            <div class="collapsible-body">
-                                <form>
-                                <p>Company Name: <span> </span></p>
-                                <p>Company Code:<span></span></p>
-                                <p>Email Address: <span></span></p>
-                                <p>Telephone: <span> </span></p>
-
-                                <p>Change Password</p>
-                                </form>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="collapsible-header"><i class="fa fa-history"></i>Account History</div>
-                            <div class="collapsible-body">
-                                <ul class="collection">
-                                    <li></li>
-                                </ul>
-                            </div>
-                        </li>
-                    </ul>
-                    <div class="col s12 center">
-                        <button class=" btn amber darken-4 white-text"> Logout</button>
-                    </div>
-                </div>
+    <div class="row container card-panel">
+        <div class="col s12 amber-text text-darken-4">
+            <h4 class="center">Company Name</h4>
+            <div class="row center">
+                <a href="#campaigns" class="col s10 m4 offset-s1 offset-m1 waves-effect waves-light btn btn-flat amber darken-4 white-text"
+                                    onclick="switch_page(this.hash)">
+                    <i class="fa fa-plus-square"></i>&nbsp;Campaigns
+                </a>
+                <a class="col s10 m4 offset-s1 offset-m2  waves-effect waves-light btn-flat amber darken-4 white-text">
+                    <i class="fa fa-credit-card"></i>&nbsp;Load Account
+                </a>
             </div>
+            <div class="row">
+                <h5 class="col s6 right-align"><i class="fa fa-credit-card-alt"></i> Balance: </h5>
+                <h5 class="col s6 left-align">KES 1200</h5>
+            </div>
+            <ul class="collapsible" data-collapsible="accordion">
+                <li>
+                    <div class="collapsible-header"><i class="fa fa-address-card-o"></i>Company profile</div>
+                    <div class="collapsible-body">
+                        <form>
+                        <p>Company Name: <span> </span></p>
+                        <p>Company Code:<span></span></p>
+                        <p>Email Address: <span></span></p>
+                        <p>Telephone: <span> </span></p>
 
-        </div>
-
+                        <p>Change Password</p>
+                        </form>
+                    </div>
+                </li>
+                <li>
+                    <div class="collapsible-header"><i class="fa fa-history"></i>Account History</div>
+                    <div class="collapsible-body">
+                        <ul class="collection">
+                            <li></li>
+                        </ul>
+                    </div>
+                </li>
+            </ul>
+            <div class="col s12 center">
+                <button class=" btn amber darken-4 white-text"> Logout</button>
+            </div>
+    </div>
     </div>
 </div>
 
 
-<div class="content d-none" id="display_campaign">
+<div class="content d-none" id="campaigns">
     <div class="row flex">
-        <div class="col s12 m4 amber darken-4 row">
+        <div id="camp_list_header" class="col s12 m5 amber darken-4 row">
             <h5 class="col s10 white-text">Campaigns</h5>
-            <h5 class="col s2 white waves-effect waves-orange center-align"
-                style="height: 48px; padding-top: 10px; margin: 0!important; border-bottom: 1px solid #ff6f00;"><i
-                    class="fa fa- amber-text text-darken-4" title="click to add a new campaign"
-                    onclick="displayCampaignRegistration()"></i></h5>
+            <span class="col s2 waves-orange center-align">
+                <a class="btn btn-floating white center-align" href="#campaigns/new" style="margin-top: 3px;" title="click to add a new campaign" onclick="switch_page(this.hash)">
+                    <i class="fa fa-plus amber-text text-darken-4"></i>
+                </a></span>
         </div>
-        <div class="col s12 m8 amber darken-4 row">
-            <h5 class="center white-text">Company Name</h5>
+        <div id="camp_content_header" class="col s12 m7 amber darken-4 row hide-on-small-and-down">
+            <span class="col s1 hide-on-med-and-up center">
+                <a class="white btn btn-floating center" style="margin-top: 3px;" href="#campaigns/home" onclick="switch_page(this.hash)">
+                    <i class="fa fa-chevron-left amber-text text-darken-4"></i>
+                </a>
+            </span>
+            <a href="#dashboard" onclick="switch_page(this.hash)" class="col s10 m12"><h5 class="center white-text">Company Name</h5></a>
         </div>
-        <div class="col s12 m4" style="border-right: 1px solid #ff6f00;">
+        <div id="camp_list" class="col s12 m5" style="border-right: 1px solid #ff6f00;">
             <div class="amber-text text-darken-4">
                 <ul class="collection">
-                    <li class="collection-item"><a class="amber-text text-darken-4" href="#">Buy one get one free</a>
+                    <li class="collection-item"><a class="amber-text text-darken-4" href="#campaigns" onclick="open_campaign(null)">Buy one get one free</a>
                     </li>
-                    <li class="collection-item active"><a class="white-text text-darken-4" href="#">Shabiki Reloads</a>
+                    <li class="collection-item active"><a class="white-text text-darken-4" href="#campaigns" onclick="open_campaign(null)">Shabiki Reloads</a>
                     </li>
                 </ul>
             </div>
         </div>
 
-        <div class="col s12 m8 amber-text text-darken-4">
+        <div id="camp_content_new" class="col s12 m7 amber-text text-darken-4 hide-on-small-and-down">
             <div class="row " id="campaign_registration">
                 <h5 class="col s12 center">New Campaign</h5>
                 <form class="col s12">
                     <div class="row flex">
-                        <div class="input-field col s12 m6 l6">
+                        <div class="input-field col s12 l6">
                             <i class="fa fa-newspaper-o prefix amber-text text-darken-4"></i>
                             <input id="campaignName" type="text" class="validate">
                             <label for="campaignName">Campaign Name</label>
                         </div>
-                        <div class="input-field col s12 m6 l6">
+                        <div class="input-field col s12 l6">
                             <i class="fa fa-address-book prefix amber-text text-darken-4"></i>
                             <input id="campaignCode" type="text" class="validate">
                             <label for="campaignCode">Campaign Code eg BINA001</label>
@@ -339,7 +361,9 @@
                     </div>
                 </form>
             </div>
-            <div class="row d-none" id="read_campaign" >
+        </div>
+        <div id="camp_content" class="col s12 m7 amber-text text-darken-4 d-none hide-on-small-and-down">
+            <div class="row" id="read_campaign" >
                 <div class="card-content amber-text text-darken-4 col s12">
                     <h3 class="card-title center">Campaign Name</h3>
                     <h4 class="center">Amount</h4>
@@ -430,6 +454,8 @@
 <script type="text/javascript" src="js/actions.js"></script>
 
 <script>
+    company_visuals();
+
     $('.button-collapse').sideNav({
             menuWidth: 300, // Default is 300
             edge: 'left', // Choose the horizontal origin
@@ -447,13 +473,31 @@
 
     var first = true;
     function switch_page(id) {
+        var full_path = id;
+        var split_path = id.split("/");
+        id = split_path[0];
         document.querySelector('#home').classList.add('d-none');
         document.querySelector('#about').classList.add('d-none');
         document.querySelector('#contact').classList.add('d-none');
         document.querySelector('#company_login').classList.add('d-none');
-        document.querySelector('#redeem_code').classList.add('d-none');
-        document.querySelector('#display_campaign').classList.add('d-none');
+        document.querySelector('#redeem').classList.add('d-none');
+        document.querySelector('#campaigns').classList.add('d-none');
         document.querySelector('#dashboard').classList.add('d-none');
+        if(!company_logged_in() && (id==="#campaigns" || id==="#dashboard")){
+            toast("You must be logged in to access this page");
+            id = "#company_login";
+        }else if(id==="#campaigns" && split_path.length===2){
+            if(split_path[1] === "new"){
+                new_campaign();
+            }else if(split_path[1] === "home"){
+                close_campaign();
+            }else {
+                open_campaign(split_path[1]);
+            }
+        }else if(id==="#redeem" && split_path.length===3){
+            document.querySelector('#redemptionCode').value = split_path[1] + " " + split_path[2]
+        }
+        window.location.href = full_path;
         if (document.querySelector(id).classList.contains('d-none')) {
             document.querySelector(id).classList.remove('d-none');
         }
@@ -477,20 +521,16 @@
         // Reinitialize tabs that were otherwise hidden
         $('ul.tabs').tabs();
     }
-    function displayCampaignRegistration (){
-        var registration = document.querySelector('#campaign_registration');
-        var view = document.querySelector('#read_campaign');
-        if (registration.classList.contains('d-none')){
-            view.classList.add('d-none');
-            registration.classList.remove('d-none');
-        }
-    }
 
-    switch (window.location.hash) {
+    var path_sent = window.location.hash.split("/");
+
+    switch (path_sent[0]) {
         case "#home":
         case "#company_login":
         case "#contact":
-        case "#redeem_code":
+        case "#campaigns":
+        case "#redeem":
+        case "#dashboard":
         case "#about":
             switch_page(window.location.hash);
             break;

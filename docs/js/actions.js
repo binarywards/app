@@ -70,6 +70,10 @@ var stop_loading = function () {
     document.querySelector("#preloader").classList.add('d-none');
 };
 
+var update_title = function(title) {
+    document.querySelector('title').innerText = "Bina Rywards - " + title;
+};
+
 var redeem_code = function () {
     start_loading();
     var phone = document.querySelector('#phoneNumber').value;
@@ -101,6 +105,85 @@ var redeem_code = function () {
         }
     });
 };
+
+var open_campaign = function (compaign_code) {
+    var camp_list_header = document.querySelector("#camp_list_header");
+    var camp_list = document.querySelector("#camp_list");
+    var camp_content_header = document.querySelector("#camp_content_header");
+    var camp_content_new = document.querySelector("#camp_content_new");
+    var camp_content = document.querySelector("#camp_content");
+
+    if(camp_content_header.classList.contains("hide-on-small-and-down"))
+        camp_content_header.classList.remove("hide-on-small-and-down");
+    if(camp_content.classList.contains("hide-on-small-and-down"))
+        camp_content.classList.remove("hide-on-small-and-down");
+    if(camp_content.classList.contains("d-none"))
+        camp_content.classList.remove("d-none");
+    camp_content_new.classList.add("d-none");
+    camp_list_header.classList.add("hide-on-small-and-down");
+    camp_list.classList.add("hide-on-small-and-down");
+};
+var close_campaign = function () {
+    var camp_list_header = document.querySelector("#camp_list_header");
+    var camp_list = document.querySelector("#camp_list");
+    var camp_content_header = document.querySelector("#camp_content_header");
+    var camp_content_new = document.querySelector("#camp_content_new");
+    var camp_content = document.querySelector("#camp_content");
+
+    if(camp_list_header.classList.contains("hide-on-small-and-down"))
+        camp_list_header.classList.remove("hide-on-small-and-down");
+    if(camp_list.classList.contains("hide-on-small-and-down"))
+        camp_list.classList.remove("hide-on-small-and-down");
+    camp_content_new.classList.add("hide-on-small-and-down");
+    camp_content_header.classList.add("hide-on-small-and-down");
+    camp_content.classList.add("hide-on-small-and-down");
+};
+var new_campaign = function () {
+    var camp_list_header = document.querySelector("#camp_list_header");
+    var camp_list = document.querySelector("#camp_list");
+    var camp_content_header = document.querySelector("#camp_content_header");
+    var camp_content_new = document.querySelector("#camp_content_new");
+    var camp_content = document.querySelector("#camp_content");
+
+    if(camp_content_header.classList.contains("hide-on-small-and-down"))
+        camp_content_header.classList.remove("hide-on-small-and-down");
+    if(camp_content_new.classList.contains("hide-on-small-and-down"))
+        camp_content_new.classList.remove("hide-on-small-and-down");
+    if(camp_content_new.classList.contains("d-none"))
+        camp_content_new.classList.remove("d-none");
+    camp_content.classList.add("d-none");
+    camp_list_header.classList.add("hide-on-small-and-down");
+    camp_list.classList.add("hide-on-small-and-down");
+};
+
+var login = Math.round(Math.random());
+
+var company_logged_in = function () {
+    return login;
+};
+
+function company_visuals() {
+    var items = document.querySelectorAll('.company_logged');
+    var logged = company_logged_in();
+    var pos, item;
+    if(logged) {
+        for (pos in items) {
+            item = items[pos];
+            if (item.classList === undefined)
+                continue;
+            if (item.classList.contains('d-none')) {
+                item.classList.remove('d-none');
+            }
+        }
+    }else{
+        for (pos in items) {
+            item = items[pos];
+            if (item.classList === undefined)
+                continue;
+            item.classList.add('d-none');
+        }
+    }
+}
 
 function signUp() {
     start_loading();
@@ -143,5 +226,5 @@ function signUp() {
 }
 
 function logIn() {
-
+    switch_page('#dashboard');
 }

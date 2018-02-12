@@ -176,3 +176,11 @@ border: none !important;
 .ul{
 	text-decoration: underline !important;
 }
+
+a.btn{
+	margin-bottom: 3px !important;
+}
+
+.company_logged{
+
+}
