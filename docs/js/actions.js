@@ -53,7 +53,7 @@ var ajax = function (options) {
     }
 };
 
-var server = "https://binarywards.herokuapp.com/"
+var server = "https://binarywards.herokuapp.com/";
 
 var toast = function (message) {
     Materialize.toast(message, 6000)

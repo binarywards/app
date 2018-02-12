@@ -55,6 +55,7 @@ class rewards:
                                                       token=redemptionCode, phone=phoneNumber)
                                 if result["success"] or str(result["success"]).lower() is "true":
                                     token = result["token"]
+                                    token['redeemed'] = False
                                     if all(key in token for key in ['redemption_code', 'prize_type', 'prize_amount']):
                                         self.db.child('app').child('companies').child(company).child('campaigns').\
                                             child(campaign_code).child('tokens').child(redemptionCode).set(token)
