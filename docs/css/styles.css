@@ -99,25 +99,76 @@ border: none !important;
 	color: #000;
 }
 /* label focus color */
-.input-field input[type=text]:focus + label {
-	color: #000;
+.input-field .materialize-textarea:focus + label,
+.input-field input[type=text]:focus + label,
+.input-field input[type=tel]:focus + label,
+.input-field input[type=number]:focus + label,
+.input-field input[type=email]:focus + label,
+.input-field input[type=password]:focus + label {
+	color: #ff6f00 !important;
 }
 /* label underline focus color */
-.input-field input[type=text]:focus {
+.input-field .materialize-textarea:focus,
+.input-field input[type=text]:focus,
+.input-field input[type=tel]:focus,
+.input-field input[type=email]:focus,
+.input-field input[type=number]:focus,
+.input-field input[type=password]:focus {
 	border-bottom: 1px solid #ff6f00 !important;
-	box-shadow: 0 1px 0 0 #ff6f00;
+	box-shadow: 0 1px 0 0 #ff6f00 !important;
+	color: #000000 !important;
 }
 /* valid color */
-.input-field input[type=text].valid {
+.input-field .materialize-textarea.valid,
+.input-field input[type=text].valid,
+.input-field input[type=tel].valid,
+.input-field input[type=number].valid,
+.input-field input[type=email].valid,
+.input-field input[type=password].valid {
 	border-bottom: 1px solid #ff6f00 !important;;
-	box-shadow: 0 1px 0 0 #ff6f00;
+	box-shadow: 0 1px 0 0 #ff6f00 !important;
+	color: #000000 !important;
 }
 /* invalid color */
-.input-field input[type=text].invalid {
+.input-field .materialize-textarea.invalid,
+.input-field input[type=text].invalid,
+.input-field input[type=email].invalid,
+.input-field input[type=password].invalid,
+.input-field input[type=number].invalid,
+.input-field input[type=tel].invalid  {
 	border-bottom: 1px solid #ff0000 !important;;
-	box-shadow: 0 1px 0 0 #ff6f00;
+	box-shadow: 0 1px 0 0 #ff0000 !important;
 }
 /* icon prefix focus color */
 .input-field .prefix.active {
-	color: #000;
+	color: #000 !important;
+}
+
+
+@media (min-width: 701px) {
+	.profile-sm-md {
+		width: 140px;
+	}
+}
+
+@media (max-width: 700px) {
+	.profile-sm-md {
+		width: 120px;
+	}
+}
+
+@media (max-width: 600px) {
+	.profile-sm-md {
+		width: 100px;
+	}
+}
+
+@media (max-width: 500px) {
+	.profile-sm-md {
+		width: 80px;
+	}
+}
+
+.profile-sm-md {
+	height: auto;
 }

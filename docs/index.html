@@ -41,16 +41,13 @@
 
     <li class="menu active"><a href="#home" class="white-text" onclick="switch_page(this.hash)">
         <i class="fa fa-home white-text"></i> Home</a></li>
-    <li class="menu"><a href="#" class="white-text" onclick="switch_page(this.hash)"><i
+    <li class="menu"><a href="#about" class="white-text" onclick="switch_page(this.hash)"><i
             class="fa fa-info white-text"></i>
         About</a></li>
     <li class="menu"><a href="#" class="white-text" onclick="switch_page(this.hash)"><i
             class="fa fa-phone white-text"></i> Contact</a></li>
-    <li class="menu"><a href="#" class="white-text" onclick="switch_page(this.hash)"><i
-            class="fa fa-question white-text"></i>
-        FAQ</a></li>
 </ul>
-<a href="#" style="margin: 20px 10px; top: 0px; right: 0px; position: absolute;" data-activates="side-bar"
+<a href="#" style="margin: 20px 10px; top: 0; right: 0; position: fixed;" data-activates="side-bar"
    class="button-collapse top-nav waves-effect waves-light circle hide-on-large-only amber darken-4 btn btn-floating"><i
         class="fa fa-navicon"></i></a>
 
@@ -59,7 +56,8 @@
 </div>
 <div class="content center-all" id="home">
     <div class="center amber-text text-darken-4">
-        <h1 class="">Welcome to Bina Rywards</h1>
+        <img src="img/logo.png" class="profile-sm-md hide-on-large-only">
+        <h2 class="">Welcome to Bina Rywards</h2>
         <p class="flow-text">Choose your type of profile to continue:</p>
         <div>
             <button class="btn amber darken-4 white-text waves-effect waves-light"
@@ -71,6 +69,19 @@
         </div>
     </div>
 </div>
+
+<div class="content center-all d-none" id="about">
+    <div class="center amber-text text-darken-4 container">
+        <img src="img/logo.png" class="profile-sm-md hide-on-large-only">
+        <h3 class="">About Us</h3>
+        <p class="flow-text" style="text-align: justify;">
+            Bina rywards is a platform that brings together businesses and the consumers of their various products.
+            We acts as an intermediary giving businesses the chance to reward their consumers usually by the basis of the purchased products.
+            We also provide powerful analytics based on the campaigns held by businesses which can provide a better insight into their market.
+        </p>
+    </div>
+</div>
+
 <div class="content center-all d-none" id="redeem_code">
     <div class="center">
         <h2 class="amber-text text-darken-4">Claim your reward</h2>
@@ -101,95 +112,84 @@
         </div>
     </div>
 </div>
-<div class="content d-none" id="company_login">
-    <div class="card">
-        <div class="card-content">
-            <h5 class="center amber-text text-darken-4">Register a new company or login if you already have an
-                account</h5>
-        </div>
-        <div class="card-tabs">
-            <ul class="tabs tabs-fixed-width">
-                <li class="tab"><a href="#signup">Sign up</a></li>
-                <li class="tab"><a class="active" href="#signin">Sign in</a></li>
 
+<div class="content center-all d-none" id="company_login">
+    <div class="row">
+        <p class="center col s12 flow-text amber-text text-darken-4">Register a new company or login if you already have an
+            account</p>
+        <div class="col s12">
+            <ul class="tabs">
+                <li class="tab col s6"><a class=" waves-effect waves-orange" href="#signup">Sign up</a></li>
+                <li class="tab col s6"><a class="active waves-effect waves-orange" href="#signin">Sign in</a></li>
             </ul>
         </div>
-        <div class="card-content white lighten-4">
-            <div id="signup" class="amber-text text-darken-4">
-                <h6>Fill the fields below to register</h6>
-                <div class="row">
-                    <form class="col s12">
-                        <div class="row">
-                            <div class="input-field col s12 m6 l6">
-                                <i class="fa fa-address-book prefix amber-text text-darken-4"></i>
-                                <input id="companyCode" type="text" class="validate">
-                                <label for="companyCode">Company Code eg BINA</label>
-                            </div>
-                            <div class="input-field col s12 m6 l6">
-                                <i class="fa fa-industry prefix amber-text text-darken-4"></i>
-                                <input id="companyName" type="tel" class="validate">
-                                <label for="companyName">Company Name eg. Binarywards</label>
-                            </div>
+        <div id="signup" class="col s12 amber-text text-darken-4">
+            <div class="row">
+                <form class="col s12" action="javascript:{ signUp(); }">
+                    <p class="flow-text center">Fill the fields below to register</p>
+                    <div class="row">
+                        <div class="input-field col s12 m6 l6">
+                            <i class="fa fa-address-book prefix amber-text text-darken-4"></i>
+                            <input id="companyCode" type="text" class="validate" required>
+                            <label for="companyCode">Company Code eg BINA</label>
                         </div>
-                        <div class="row">
-                            <div class="input-field col s12 m6 l6">
-                                <i class="fa fa-envelope prefix amber-text text-darken-4"></i>
-                                <input id="email" type="text" class="validate">
-                                <label for="email">Email Address </label>
-                            </div>
-                            <div class="input-field col s12 m6 l6">
-                                <i class="fa fa-phone prefix amber-text text-darken-4"></i>
-                                <input id="companyPhone" type="tel" class="validate">
-                                <label for="companyPhone">Telephone Number</label>
-                            </div>
+                        <div class="input-field col s12 m6 l6">
+                            <i class="fa fa-industry prefix amber-text text-darken-4"></i>
+                            <input id="companyName" type="tel" class="validate" required>
+                            <label for="companyName">Company Name eg. Binarywards</label>
                         </div>
-                        <div class="row">
-                            <div class="input-field col s12 m6 l6">
-                                <i class="fa fa-file-text prefix amber-text text-darken-4"></i>
-                                <input id="registerPassword" type="password" class="validate">
-                                <label for="registerPassword">Password</label>
-                            </div>
+                        <div class="input-field col s12 m6 l6">
+                            <i class="fa fa-envelope prefix amber-text text-darken-4"></i>
+                            <input id="email" type="text" class="validate" required>
+                            <label for="email">Email Address </label>
                         </div>
-                        <div class="center">
-                            <button type="button" class="btn btn-large white-text amber darken-4 waves-effect waves-light"
-                                    id="btn_signup" onclick="signUp()"> Create Account
-                            </button>
+                        <div class="input-field col s12 m6 l6">
+                            <i class="fa fa-phone prefix amber-text text-darken-4"></i>
+                            <input id="companyPhone" type="tel" class="validate" required>
+                            <label for="companyPhone">Phone Number</label>
                         </div>
-                    </form>
-                </div>
+                        <div class="input-field col s12 m6 l6">
+                            <i class="fa fa-file-text prefix amber-text text-darken-4"></i>
+                            <input id="registerPassword" type="password" class="validate" required>
+                            <label for="registerPassword">Password</label>
+                        </div>
+                    </div>
+                    <div class="center">
+                        <button type="submit" class="btn white-text amber darken-4 waves-effect waves-light"> Create Account
+                        </button>
+                    </div>
+                </form>
             </div>
-            <div id="signin" class="amber-text text-darken-4">
-                <div class="row ">
-                    <form class="col s12">
-                        <div class="row">Below credentials required to login</div>
+        </div>
+        <div id="signin" class="col s12 amber-text text-darken-4">
+            <div class="row">
+                <form class="col s12">
+                    <p class="flow-text center small">Enter your credentials required to login</p>
 
-                        <div class="row ">
-                            <div class="input-field col s12 l12 m12">
-                                <i class="fa fa-address-card-o prefix amber-text text-darken-4"></i>
-                                <input id="usercode" type="text" class="validate">
-                                <label for="usercode">Company Code</label>
-                            </div>
+                    <div class="row ">
+                        <div class="input-field col s10 l6 m8 offset-l3 offset-m2 offset-s1">
+                            <i class="fa fa-address-card-o prefix amber-text text-darken-4"></i>
+                            <input id="usercode" type="text" class="validate" required>
+                            <label for="usercode">Company Code</label>
                         </div>
-                        <div class="row ">
-                            <div class="input-field col s12 m12 l12">
-                                <i class="fa fa-file-text-o prefix amber-text text-darken-4"></i>
-                                <input id="password" type="password" class="validate amber-text darken-4">
-                                <label for="password">Password</label>
-                            </div>
+                        <div class="input-field col  s10 l6 m8 offset-l3 offset-m2 offset-s1 ">
+                            <i class="fa fa-file-text-o prefix amber-text text-darken-4"></i>
+                            <input id="password" type="password" class="validate amber-text darken-4" required>
+                            <label for="password">Password</label>
                         </div>
-                        <div class="center">
-                            <button type="button"
-                                    class=" center btn btn-large white-text amber darken-4 waves-effect waves-light"
-                                    id="btn_login" onclick="switch_page('#dashboard')"> Sign In
-                            </button>
-                        </div>
-                    </form>
-                </div>
+                    </div>
+                    <div class="center">
+                        <button type="button"
+                                class=" center btn white-text amber darken-4 waves-effect waves-light"
+                                id="btn_login" onclick="switch_page('#dashboard')"> Sign In
+                        </button>
+                    </div>
+                </form>
             </div>
-
         </div>
     </div>
 </div>
+
 <div class="content amber-text text-darken-4 d-none center-all" id="dashboard">
     <div class="row" style="min-width: 80%;">
         <div class="col s12">
@@ -248,7 +248,7 @@
             <h5 class="col s10 white-text">Campaigns</h5>
             <h5 class="col s2 white waves-effect waves-orange center-align"
                 style="height: 48px; padding-top: 10px; margin: 0!important; border-bottom: 1px solid #ff6f00;"><i
-                    class="fa fa-plus amber-text text-darken-4" title="click to add a new campaign"
+                    class="fa fa- amber-text text-darken-4" title="click to add a new campaign"
                     onclick="displayCampaignRegistration()"></i></h5>
         </div>
         <div class="col s12 m8 amber darken-4 row">
@@ -428,8 +428,10 @@
         $('select').material_select();
     });
 
+    var first = true;
     function switch_page(id) {
         document.querySelector('#home').classList.add('d-none');
+        document.querySelector('#about').classList.add('d-none');
         document.querySelector('#company_login').classList.add('d-none');
         document.querySelector('#redeem_code').classList.add('d-none');
         document.querySelector('#display_campaign').classList.add('d-none');
@@ -437,6 +439,25 @@
         if (document.querySelector(id).classList.contains('d-none')) {
             document.querySelector(id).classList.remove('d-none');
         }
+        // Don't scroll to top the first page
+        if (!first)
+            $('html, body').animate({scrollTop: 0}, 800);
+        first = false;
+        var menus = document.querySelectorAll('.menu');
+        for (var pos in menus) {
+            var menu = menus[pos];
+            if (menu.firstChild == undefined)
+                continue
+            if (menu.firstChild.hash == identifier) {
+                menu.classList.add('active');
+            } else {
+                if (menu.classList.contains('active')) {
+                    menu.classList.remove('active');
+                }
+            }
+        }
+        // Reinitialize tabs that were otherwise hidden
+        $('ul.tabs').tabs();
     }
     function displayCampaignRegistration (){
         var registration = document.querySelector('#campaign_registration');
