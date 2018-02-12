@@ -172,3 +172,7 @@ border: none !important;
 .profile-sm-md {
 	height: auto;
 }
+
+.ul{
+	text-decoration: underline !important;
+}

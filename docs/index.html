@@ -45,7 +45,7 @@
     <li class="menu"><a href="#about" class="white-text" onclick="switch_page(this.hash)"><i
             class="fa fa-info white-text"></i>
         About</a></li>
-    <li class="menu"><a href="#" class="white-text" onclick="switch_page(this.hash)"><i
+    <li class="menu"><a href="#contact" class="white-text" onclick="switch_page(this.hash)"><i
             class="fa fa-phone white-text"></i> Contact</a></li>
 </ul>
 <a href="#" style="margin: 20px 10px; top: 0; right: 0; position: fixed;" data-activates="side-bar"
@@ -79,6 +79,22 @@
             Bina rywards is a platform that brings together businesses and the consumers of their various products.
             We acts as an intermediary giving businesses the chance to reward their consumers usually by the basis of the purchased products.
             We also provide powerful analytics based on the campaigns held by businesses which can provide a better insight into their market.
+        </p>
+    </div>
+</div>
+
+<div class="content center-all d-none" id="contact">
+    <div class="center amber-text text-darken-4 container">
+        <img src="img/logo.png" class="profile-sm-md hide-on-large-only">
+        <h3 class="">Contact Us</h3>
+        <p class="flow-text center">
+            Email:
+            <br>
+            <a href="mailto:hello@binarywards.tech" class="orange-text text-darken-4 ul" target="_blank">hello@binarywards.tech</a>
+            <br>Call:
+            <br>
+            <a href="tel:+254728824727" class="orange-text text-darken-4 ul" target="_blank">+254 728 824727</a><br>
+            <a href="tel:+254718529992" class="orange-text text-darken-4 ul" target="_blank">+254 718 529992</a>
         </p>
     </div>
 </div>
@@ -433,6 +449,7 @@
     function switch_page(id) {
         document.querySelector('#home').classList.add('d-none');
         document.querySelector('#about').classList.add('d-none');
+        document.querySelector('#contact').classList.add('d-none');
         document.querySelector('#company_login').classList.add('d-none');
         document.querySelector('#redeem_code').classList.add('d-none');
         document.querySelector('#display_campaign').classList.add('d-none');
@@ -448,8 +465,8 @@
         for (var pos in menus) {
             var menu = menus[pos];
             if (menu.firstChild == undefined)
-                continue
-            if (menu.firstChild.hash == identifier) {
+                continue;
+            if (menu.firstChild.hash == id) {
                 menu.classList.add('active');
             } else {
                 if (menu.classList.contains('active')) {
@@ -467,6 +484,19 @@
             view.classList.add('d-none');
             registration.classList.remove('d-none');
         }
+    }
+
+    switch (window.location.hash) {
+        case "#home":
+        case "#company_login":
+        case "#contact":
+        case "#redeem_code":
+        case "#about":
+            switch_page(window.location.hash);
+            break;
+        default:
+            first = false;
+            break;
     }
 </script>
 
