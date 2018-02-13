@@ -164,10 +164,34 @@ var new_campaign = function () {
     camp_list.classList.add("hide-on-small-and-down");
 };
 
+var dummy_login = function () {
+    window.sessionStorage.setItem("company_code", "BINA");
+    window.sessionStorage.setItem("auth_token","begufvdgg87438y4figf87873gfe87");
+    window.sessionStorage.setItem("email", "me@billcountry.tech");
+    window.sessionStorage.setItem("balance", 10);
+    window.sessionStorage.setItem("name", "Bina Rywards");
+    window.sessionStorage.setItem("phone", "0728824727");
+};
+
 var company_logged_in = function () {
     var company_code = window.sessionStorage.getItem('company_code');
     var auth_token = window.sessionStorage.getItem('auth_token');
     return company_code !== null && auth_token !== null;
+};
+
+var fill_class = function(_class, data){
+    var items = document.querySelectorAll(_class);
+    for(var pos in items) {
+        var item = items[pos];
+        if (item.classList === undefined)
+            continue;
+        var tag = item.tagName.toLocaleLowerCase();
+        if(tag === "input" || tag === "textarea"){
+            item.value = data;
+        }else{
+            item.innerHTML = data;
+        }
+    }
 };
 
 var company_visuals = function() {
@@ -183,6 +207,7 @@ var company_visuals = function() {
                 item.classList.remove('d-none');
             }
         }
+        fill_class('.company_name', window.sessionStorage.getItem("name"), false);
     }else{
         for (pos in items) {
             item = items[pos];
@@ -216,7 +241,11 @@ function signUp() {
             var message = response.message;
             if (success) {
                 toast(message);
+                document.querySelector("#company_code").value = companyCode;
+                document.querySelector("#password").value = password;
                 document.forms.new_company.reset();
+                toast("You will be automatically logged in in 6 seconds");
+                setTimeout("logIn()", 6000);
             } else {
                 toast(message);
             }
@@ -252,7 +281,11 @@ function logIn() {
                 document.forms.company_login.reset();
                 toast("Login successful");
                 window.sessionStorage.setItem("company_code", company_code);
-                window.sessionStorage.setItem("auth_token", response.message);
+                window.sessionStorage.setItem("auth_token", response.message.token);
+                window.sessionStorage.setItem("email", response.message.email);
+                window.sessionStorage.setItem("balance", response.message.balance);
+                window.sessionStorage.setItem("name", response.message.name);
+                window.sessionStorage.setItem("phone", response.message.phone);
                 switch_page("#dashboard");
                 company_visuals();
             } else {
@@ -271,3 +304,15 @@ function logIn() {
 
     })
 }
+
+var add_campaign = function(){
+    var campaignCode = document.querySelector("#campaignCode").value;
+    var campaignName = document.querySelector("#campaignName").value;
+    var message = document.querySelector("#message").value;
+    var description = document.querySelector("#message").value;
+    var customMessage = document.querySelector("#customMessage").value;
+    var callBack = document.querySelector("#callBack").value;
+    var rywardCalls = document.querySelector("#rywardCalls").value;
+    var rywardType = document.querySelector("#rywardType").value;
+    // company_code, campaign_name, campaign_code, message, custom_message, details, callback, token_call, token_type, token
+};

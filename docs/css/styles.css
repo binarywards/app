@@ -100,6 +100,7 @@ border: none !important;
 }
 /* label focus color */
 .input-field .materialize-textarea:focus + label,
+.input-field input[type=url]:focus + label,
 .input-field input[type=text]:focus + label,
 .input-field input[type=tel]:focus + label,
 .input-field input[type=number]:focus + label,
@@ -109,6 +110,7 @@ border: none !important;
 }
 /* label underline focus color */
 .input-field .materialize-textarea:focus,
+.input-field input[type=url]:focus,
 .input-field input[type=text]:focus,
 .input-field input[type=tel]:focus,
 .input-field input[type=email]:focus,
@@ -120,6 +122,7 @@ border: none !important;
 }
 /* valid color */
 .input-field .materialize-textarea.valid,
+.input-field input[type=url].valid,
 .input-field input[type=text].valid,
 .input-field input[type=tel].valid,
 .input-field input[type=number].valid,
@@ -131,6 +134,7 @@ border: none !important;
 }
 /* invalid color */
 .input-field .materialize-textarea.invalid,
+.input-field input[type=url].invalid,
 .input-field input[type=text].invalid,
 .input-field input[type=email].invalid,
 .input-field input[type=password].invalid,
@@ -181,6 +185,14 @@ a.btn{
 	margin-bottom: 3px !important;
 }
 
+/*
+Empty classes just so they can be suggested by the ide
+ */
+
+.company_name,
+.company_balance,
+.campaign_name,
+.campaign_code,
 .company_logged{
 
 }

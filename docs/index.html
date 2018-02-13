@@ -45,7 +45,7 @@
             <i class="fa fa-home white-text"></i> Home
         </a>
     </li>
-    <li class="subheader company_logged">Company</li>
+    <li class="subheader company_logged company_name">Company</li>
     <li class="menu company_logged">
         <a href="#dashboard" class="white-text" onclick="switch_page(this.hash)">
             <i class="fa fa-info white-text"></i> Dashboard
@@ -228,7 +228,7 @@
 <div class="content amber-text text-darken-4 d-none center-all" id="dashboard">
     <div class="row container card-panel">
         <div class="col s12 amber-text text-darken-4">
-            <h4 class="center">Company Name</h4>
+            <h4 class="center company_name">Company Name</h4>
             <div class="row center">
                 <a href="#campaigns" class="col s10 m4 offset-s1 offset-m1 waves-effect waves-light btn btn-flat amber darken-4 white-text"
                                     onclick="switch_page(this.hash)">
@@ -272,25 +272,24 @@
     </div>
 </div>
 
-
 <div class="content d-none" id="campaigns">
     <div class="row flex">
-        <div id="camp_list_header" class="col s12 m5 amber darken-4 row">
+        <div id="camp_list_header" class="col s12 m5 amber darken-4 row" style="margin-bottom: 0 !important;">
             <h5 class="col s10 white-text">Campaigns</h5>
             <span class="col s2 waves-orange center-align">
                 <a class="btn btn-floating white center-align" href="#campaigns/new" style="margin-top: 3px;" title="click to add a new campaign" onclick="switch_page(this.hash)">
                     <i class="fa fa-plus amber-text text-darken-4"></i>
                 </a></span>
         </div>
-        <div id="camp_content_header" class="col s12 m7 amber darken-4 row hide-on-small-and-down">
+        <div id="camp_content_header" class="col s12 m7 amber darken-4 row hide-on-small-and-down" style="margin-bottom: 0 !important;">
             <span class="col s1 hide-on-med-and-up center">
                 <a class="white btn btn-floating center" style="margin-top: 3px;" href="#campaigns/home" onclick="switch_page(this.hash)">
                     <i class="fa fa-chevron-left amber-text text-darken-4"></i>
                 </a>
             </span>
-            <a href="#dashboard" onclick="switch_page(this.hash)" class="col s10 m12"><h5 class="center white-text">Company Name</h5></a>
+            <a href="#dashboard" onclick="switch_page(this.hash)" class="col s10 m12"><h5 class="center white-text company_name">Company Name</h5></a>
         </div>
-        <div id="camp_list" class="col s12 m5" style="border-right: 1px solid #ff6f00;">
+        <div id="camp_list" class="col s12 m5" style="border-right: 1px solid #ff6f00; margin-bottom: 0 !important;">
             <div class="amber-text text-darken-4">
                 <ul class="collection">
                     <li class="collection-item"><a class="amber-text text-darken-4" href="#campaigns" onclick="open_campaign(null)">Buy one get one free</a>
@@ -301,30 +300,20 @@
             </div>
         </div>
 
-        <div id="camp_content_new" class="col s12 m7 amber-text text-darken-4 hide-on-small-and-down">
+        <div id="camp_content_new" style="margin-bottom: 0 !important;" class="col s12 m7 amber-text text-darken-4 hide-on-small-and-down">
             <div class="row " id="campaign_registration">
                 <h5 class="col s12 center">New Campaign</h5>
-                <form class="col s12">
+                <form class="col s12" action="javascript:{ add_campaign(); }">
                     <div class="row flex">
-                        <div class="input-field col s12 l6">
+                        <div class="input-field col s12">
                             <i class="fa fa-newspaper-o prefix amber-text text-darken-4"></i>
-                            <input id="campaignName" type="text" class="validate">
+                            <input id="campaignName" type="text" class="validate" required>
                             <label for="campaignName">Campaign Name</label>
                         </div>
-                        <div class="input-field col s12 l6">
+                        <div class="input-field col s12">
                             <i class="fa fa-address-book prefix amber-text text-darken-4"></i>
-                            <input id="campaignCode" type="text" class="validate">
-                            <label for="campaignCode">Campaign Code eg BINA001</label>
-                        </div>
-                        <div class="input-field col s12">
-                            <i class="fa fa-file-text-o prefix amber-text text-darken-4"></i>
-                            <textarea id="message" type="text" class="validate materialize-textarea"></textarea>
-                            <label for="message">Message (To be sent on success)</label>
-                        </div>
-                        <div class="input-field col s12">
-                            <i class="fa fa-file-text prefix amber-text text-darken-4"></i>
-                            <textarea id="customMessage" type="text" class="validate materialize-textarea"></textarea>
-                            <label for="customMessage">Custom Message (To be sent on custom ryward)</label>
+                            <input id="campaignCode" type="text" class="validate" required>
+                            <label for="campaignCode">Campaign Code eg BINA001(Cannot be changed later)</label>
                         </div>
                         <div class="input-field col s12">
                             <i class="fa fa-file prefix amber-text text-darken-4"></i>
@@ -333,96 +322,72 @@
                         </div>
                         <div class="input-field col s12">
                             <i class="fa fa-external-link prefix amber-text text-darken-4"></i>
-                            <input id="callBack" type="text" class="validate">
-                            <label for="callBack">Call back URL(We'll send a post request after redemption)</label>
+                            <input id="callBack" type="url" class="validate">
+                            <label for="callBack">Call back URL (We'll send a post request after redemption)</label>
                         </div>
-                        <div class="input-field col s12">
+                        <div class="input-field col s12" id="reward_call_cont">
                             <i class="fa fa-link prefix amber-text text-darken-4"></i>
-                            <input id="rywardCalls" type="tel" class="validate">
-                            <label for="rywardCalls">ryward Url(To be called in case you want to provide custom
-                                tokens)</label>
-                        </div>
-                        <div class="input-field col s12">
-                            <i class="fa fa-gift prefix amber-text text-darken-4"></i>
-                            <select id="rywardType">
-                                <option>Refer (We will be confirming the code from your server)</option>
-                                <option>Stored (We will save the data in our database)</option>
-                            </select>
-                            <label for="rywardType">ryward Type eg Free airtime, electronics</label>
+                            <input id="rywardCalls" type="url" class="validate">
+                            <label for="rywardCalls">Ryward Url (To be called to confirm a custom token)</label>
                         </div>
                         <div class="col s12 center">
-                            <button class="btn waves-effect waves-light amber darken-4"><i class="fa fa-plus left"></i>Add
-                                Campaign
-                            </button>
+                            <button type="submit" class="btn waves-effect waves-light amber darken-4"><i class="fa fa-plus left"></i>Add Campaign</button>
                         </div>
                     </div>
                 </form>
             </div>
         </div>
-        <div id="camp_content" class="col s12 m7 amber-text text-darken-4 d-none hide-on-small-and-down">
+        <div id="camp_content" style="margin-bottom: 0 !important;" class="col s12 m7 amber-text text-darken-4 d-none hide-on-small-and-down">
             <div class="row" id="read_campaign" >
-                <div class="card-content amber-text text-darken-4 col s12">
-                    <h3 class="card-title center">Campaign Name</h3>
-                    <h4 class="center">Amount</h4>
+                <div class="amber-text text-darken-4 col s12">
+                    <h4 class="center campaign_name" style="margin-bottom: 2px !important;">Campaign Name</h4>
+                    <p class="center flow-text semi-bold campaign_code" style="margin-top: 0 !important;">(<span>CODE</span>)</p>
+                    <p class="center flow-text">Spent: KES 1200.00</p>
                     <ul class="collapsible" data-collapsible="accordion">
                         <li>
                             <div class="collapsible-header">Campaign Details</div>
                             <div class="collapsible-body">
-                                <div class="row">
-                                    <form class="col s12">
-                                        <div class="row">
-                                            <div class="input-field col s12">
-                                                <input value="" id="campaignDisplayCode" type="text" class="validate">
-                                                <label for="campaignDisplayCode">Campaign code</label>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="input-field col s12">
-                                                <input value="" id="campaignMessage" type="text" class="validate">
-                                                <label for="campaignMessage">Campaign Message</label>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="input-field col s12">
-                                                <input value="" id="campaignCustomMessage" type="text" class="validate">
-                                                <label for="campaignCustomMessage">Campaign Custom Message</label>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="input-field col s12">
-                                                <input value="" id="campaignDescription" type="text" class="validate">
-                                                <label for="campaignDescription">Campaign Description</label>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="input-field col s12">
-                                                <input value="" id="campaignCallbackUrl" type="text" class="validate">
-                                                <label for="campaignCallbackUrl">Campaign Callback Url</label>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="input-field col s12">
-                                                <input value="" id="campaignrywardCalls" type="text" class="validate">
-                                                <label for="campaignrywardCalls">Campaign ryward Calls</label>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="input-field col s12">
-                                                <input value="" id="campaignrywardType" type="text" class="validate">
-                                                <label for="campaignrywardType">Campaign ryward Type</label>
-                                            </div>
-                                        </div>
-
-                                    </form>
+                                <form class="row">
+                                    <div class="input-field col s12">
+                                        <i class="fa fa-industry prefix"></i>
+                                        <input value="" id="updateCampaignName" type="text" class="validate">
+                                        <label for="updateCampaignName">Name</label>
+                                    </div>
+                                    <div class="input-field col s12">
+                                        <i class="fa fa-envelope-o prefix"></i>
+                                        <textarea id="updateCampaignDescription" type="text" class="materialize-textarea validate"></textarea>
+                                        <label for="updateCampaignDescription">Description</label>
+                                    </div>
+                                </form>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="collapsible-header">Call Backs</div>
+                            <div class="collapsible-body">
+                                <form class="row">
+                                    <div class="input-field col s12">
+                                        <i class="fa fa-link prefix"></i>
+                                        <input type="url" class="validate" id="updateCallback" title="">
+                                        <label for="updateCallback">Call Back Url</label>
+                                    </div>
+                                    <small>
+                                        This url will be called after the user redeems the token, leave blank if you don't need this.
+                                        The data sent includes: (phone_number, redeemed_code, campaign_code, reward_type, reward_amount)
+                                    </small>
+                                </form>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="collapsible-header">Messages</div>
+                            <div class="collapsible-body">
+                                <div class="row s12">
+                                    <div class="col s12"><i class="fa fa-history"></i> Tokens history </div>
                                 </div>
                             </div>
                         </li>
                         <li>
                             <div class="collapsible-header">Token Details</div>
                             <div class="collapsible-body">
-                            <div class="row">
-
-                            </div>
                                 <div class="row s12">
                                     <div class="col s12"><i class="fa fa-history"></i> Tokens history </div>
                                 </div>
@@ -451,6 +416,9 @@
 <script type="text/javascript" src="js/actions.js"></script>
 
 <script>
+    // Dummy login for testing
+    // dummy_login();
+
     company_visuals();
 
     $('.button-collapse').sideNav({
@@ -458,9 +426,9 @@
             edge: 'left', // Choose the horizontal origin
             closeOnClick: true, // Closes side-nav on <a> clicks, useful for Angular/Meteor
             draggable: true, // Choose whether you can drag to open on touch screens,
-            onOpen: function (el) { /* Do Stuff */
+            onOpen: function (el){ /* Do Stuff */
             }, // A function to be called when sideNav is opened
-            onClose: function (el) { /* Do Stuff */
+            onClose: function (el){ /* Do Stuff */
             } // A function to be called when sideNav is closed
         }
     );
