@@ -93,12 +93,13 @@ var redeem_code = function () {
         dataTye: "json",
         success: function (response) {
             // Process your data here e.g:
-            var success = response['success'];
-            var message = response['message'];
+            var success = response.success;
+            var message = response.message;
             if (success) {
-                toast(message)
+                toast(message);
+                document.forms.redeem.reset();
             } else {
-                toast(message)
+                toast(message);
             }
             stop_loading();
         },
@@ -211,14 +212,13 @@ function signUp() {
         },
         dataTye: "json",
         success: function (response) {
-            var success = response['success'];
-            var message = response['message'];
+            var success = response.success;
+            var message = response.message;
             console.log(response);
             if (success) {
-                toast("Company added successfully");
                 toast(message);
+                document.forms.new_company.reset();
             } else {
-                toast("Company added successfully");
                 toast(message);
             }
             stop_loading();
