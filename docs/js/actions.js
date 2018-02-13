@@ -53,10 +53,15 @@ var ajax = function (options) {
     }
 };
 
+/* print() coz console.log() is way too long */
+var print = function (data) {
+    console.log(data);
+};
+
 var server = "https://binarywards.herokuapp.com/";
 
 var toast = function (message) {
-    Materialize.toast(message, 6000)
+    Materialize.toast(message, 10000)
 };
 
 
@@ -78,7 +83,7 @@ var redeem_code = function () {
     start_loading();
     var phone = document.querySelector('#phoneNumber').value;
     var code = document.querySelector('#redemptionCode').value;
-    $.ajax({
+    ajax({
         url: "api/redeem_token",
         type: "POST",
         data: {
@@ -90,7 +95,6 @@ var redeem_code = function () {
             // Process your data here e.g:
             var success = response['success'];
             var message = response['message'];
-            console.log(message);
             if (success) {
                 toast(message)
             } else {
@@ -99,8 +103,11 @@ var redeem_code = function () {
             stop_loading();
         },
         error: function (error) {
-            console.log();
-            toast(error.responseJSON.message);
+            var response = error.responseJSON;
+            if(error.responseJSON === undefined){
+                response = JSON.parse(error.responseText);
+            }
+            toast(response.message);
             stop_loading();
         }
     });
@@ -156,13 +163,13 @@ var new_campaign = function () {
     camp_list.classList.add("hide-on-small-and-down");
 };
 
-var login = Math.round(Math.random());
-
 var company_logged_in = function () {
-    return login;
+    var company_code = window.sessionStorage.getItem('company_code');
+    var auth_token = window.sessionStorage.getItem('auth_token');
+    return company_code !== null && auth_token !== null;
 };
 
-function company_visuals() {
+var company_visuals = function() {
     var items = document.querySelectorAll('.company_logged');
     var logged = company_logged_in();
     var pos, item;
@@ -183,7 +190,7 @@ function company_visuals() {
             item.classList.add('d-none');
         }
     }
-}
+};
 
 function signUp() {
     start_loading();
@@ -206,6 +213,7 @@ function signUp() {
         success: function (response) {
             var success = response['success'];
             var message = response['message'];
+            console.log(response);
             if (success) {
                 toast("Company added successfully");
                 toast(message);
@@ -216,8 +224,11 @@ function signUp() {
             stop_loading();
         },
         error: function (error) {
-            toast(error.responseText);
-            toast("An error occurred");
+            var response = error.responseJSON;
+            if(error.responseJSON === undefined){
+                response = JSON.parse(error.responseText);
+            }
+            toast(response.message);
             stop_loading();
         }
 

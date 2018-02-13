@@ -8,8 +8,6 @@ class utilities:
         import requests
         if headers is None:
             headers = {}
-        request = None
-        response = None
         if method == "POST":
             request = requests.post(url=url, data=params, headers=headers)
         elif method == "PUT":
@@ -19,7 +17,7 @@ class utilities:
         else:
             request = requests.get(url=url, params=params, headers=headers)
         if data_type == "json":
-            response = request.text
+            response = request.json()
         else:
             response = request.text
         return response

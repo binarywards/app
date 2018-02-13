@@ -73,7 +73,8 @@ class rewards:
                             if token['prize_type'] == 'Airtime':
                                 # Send airtime
                                 result = self.gateway.buy_airtime_single(phoneNumber, token['prize_amount'])
-                                if result["responses"][0]["status"] == 'sent':
+
+                                if str(result["responses"][0]["status"]).lower() == 'sent':
                                     request_id = result["responses"][0]["requestId"]
                                     database.record_reward(company, campaign_code, True, request_id, phoneNumber,
                                                            redemptionCode, 'Airtime', token['prize_amount'])
