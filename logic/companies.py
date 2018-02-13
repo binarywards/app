@@ -63,7 +63,7 @@ class company:
                             params = dict(to=phone, message="Welcome to Bina Rywards." +
                                           "\nUse the welcome token below to receive KES 20 airtime" +
                                           " from our website.\nToken: BINA "+str(custom)+"\nOr " +
-                                          "visit: https://binarewards.tech/#redeem/BINA/"+str(custom)+"\n")
+                                          "visit: https://binarywards.tech/#redeem/BINA/"+str(custom)+"\n")
                             utils.run_in_background(self.gateway.send_message, **params)
                             status = utils.status_code.success
                             success = True
