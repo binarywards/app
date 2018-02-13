@@ -90,7 +90,7 @@ var redeem_code = function () {
             redemptionCode: code,
             phoneNumber: phone
         },
-        dataTye: "json",
+        dataType: "json",
         success: function (response) {
             // Process your data here e.g:
             var success = response.success;
@@ -210,11 +210,10 @@ function signUp() {
             phone_number: companyPhone,
             password: password
         },
-        dataTye: "json",
+        dataType: "json",
         success: function (response) {
             var success = response.success;
             var message = response.message;
-            console.log(response);
             if (success) {
                 toast(message);
                 document.forms.new_company.reset();
@@ -237,5 +236,38 @@ function signUp() {
 }
 
 function logIn() {
-    switch_page('#dashboard');
+    var company_code = document.querySelector("#company_code").value;
+    var password = document.querySelector("#password").value;
+    start_loading();
+    ajax({
+        url: "api/company_login",
+        type: "POST",
+        data: {
+            company_code: company_code,
+            password: password
+        },
+        dataType: "json",
+        success: function (response) {
+            if (response.success) {
+                document.forms.company_login.reset();
+                toast("Login successful");
+                window.sessionStorage.setItem("company_code", company_code);
+                window.sessionStorage.setItem("auth_token", response.message);
+                switch_page("#dashboard");
+                company_visuals();
+            } else {
+                toast(response.message);
+            }
+            stop_loading();
+        },
+        error: function (error) {
+            var response = error.responseJSON;
+            if(error.responseJSON === undefined){
+                response = JSON.parse(error.responseText);
+            }
+            toast(response.message);
+            stop_loading();
+        }
+
+    })
 }
