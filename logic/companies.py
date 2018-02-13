@@ -25,10 +25,10 @@ class company:
         message = "Unknown error occurred, please retry"
         success = False
         try:
-            company = self.db.child('app').child('companies').child(company_code).child('details').get().val()
-            if company is not None:
+            comp = self.db.child('app').child('companies').child(company_code).child('details').get().val()
+            if comp is not None:
                 password = utils.sha256(password)
-                if company['password'] == password:
+                if comp['password'] == password:
                     # Generate a token
                     token = utils.random_string(16)
                     self.db.child('app').child('companies').child(company_code).\
@@ -42,8 +42,8 @@ class company:
             else:
                 message = "Company does not exist"
                 status = utils.status_code.not_found
-        except Exception:
-            utils.async_logger("Company Login error", traceback.format_exc(4))
+        except Exception as error:
+            utils.async_logger(str(error), traceback.format_exc(4))
         return utils.api_return(success, message, status)
 
     def register_company(self, email, phone_number, password, name, company_code):
@@ -60,10 +60,14 @@ class company:
                             database.create_company(email, phone, password, name, company_code)
                             custom = utils.random_string(6, "0123456789")
                             database.add_custom_token(custom, 'Airtime', '20')
-                            self.gateway.send_message(phone, "Welcome to Bina Rywards.\nUse the welcome token below to recieve KES 20 airtime from our website.\nToken: BINA "+str(custom)+"\n")
+                            params = dict(to=phone, message="Welcome to Bina Rywards." +
+                                          "\nUse the welcome token below to receive KES 20 airtime" +
+                                          " from our website.\nToken: BINA "+str(custom)+"\nOr " +
+                                          "visit: https://binarewards.tech/#redeem/BINA/"+str(custom)+"\n")
+                            utils.run_in_background(self.gateway.send_message, **params)
                             status = utils.status_code.success
                             success = True
-                            message = company_code + "Added successfully"
+                            message = name + "(" + company_code + ")" + " Added successfully"
                         else:
                             status = utils.status_code.forbidden
                             message = "Company code " + str(company_code) + " already exists"
@@ -155,6 +159,6 @@ class company:
             else:
                 status = utils.status_code.forbidden
                 message = "Invalid authentication code"
-        except Exception:
-            utils.async_logger("Error adding campaign", traceback.format_exc(4))
+        except Exception as error:
+            utils.async_logger(str(error), traceback.format_exc(4))
         return utils.api_return(success, message, status)

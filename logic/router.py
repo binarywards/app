@@ -40,6 +40,13 @@ def actions():
             "headers": [],
             "function": comp.register_company
         },
+        "company_login": {
+            "description": "Login to an organization profile",
+            "method": "POST",
+            "parameters": ['password', 'company_code'],
+            "headers": [],
+            "function": comp.company_login
+        },
         "company_new_campaign": {
             "description": "Adds a new campaign by an organization",
             "method": "POST",
