@@ -153,7 +153,6 @@ def async_jax(url, method="GET", data_type="json", headers=None, **params):
 
 
 def async_logger(title, data):
-    print(data)
     threading.Thread(target=log_error, kwargs=dict(title=title, data=data)).start()
 
 

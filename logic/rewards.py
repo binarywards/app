@@ -106,7 +106,6 @@ class rewards:
                 status = utils.status_code.invalid_data
                 message = "Invalid phone number. Phone number must be in format: +2547 XXX XXX XXX"
         except Exception as error:
-            message = str(error) + "\n" + traceback.format_exc()
             utils.async_logger(str(error), traceback.format_exc())
         return utils.api_return(success, message, status)
 
