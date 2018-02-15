@@ -147,6 +147,13 @@ def py_jax(url, method="GET", data_type="json", headers=None, **params):
     return response
 
 
+def fill_default(dictionary, key, default):
+    if key in dictionary:
+        return dictionary[key]
+    else:
+        return default
+
+
 def async_jax(url, method="GET", data_type="json", headers=None, **params):
     threading.Thread(target=py_jax, kwargs=dict(url=url, method=method, data_type=data_type,
                                                 headers=headers, **params))

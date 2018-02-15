@@ -192,7 +192,14 @@ Empty classes just so they can be suggested by the ide
 .company_name,
 .company_balance,
 .campaign_name,
+.current_page,
 .campaign_code,
+.campaign_spend,
+.campaign_desc,
+.campaign_call,
+.campaign_reward,
+.campaign_message,
+.campaign_custom,
 .company_logged{
 
 }

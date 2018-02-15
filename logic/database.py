@@ -47,12 +47,12 @@ def create_company(email, phone_number, password, name, company_code):
 # company_code, campaign_name, details, campaign_code, token_type['refer', 'stored'], custom_message,
 # token_type, callback, token_call, token_type
 def create_campaign(company_code, campaign_name, campaign_code, message, custom_message, details,
-                    callback, token_call, token_type=''):
+                    callback, token_call):
     db.child("app").child("companies").child(company_code).child("campaigns").child(campaign_code).set(dict(
         name=campaign_name, message=message, custom_message=custom_message, details=details
     ))
     db.child("app").child("campaigns").child(campaign_code).set(dict(
-        company=company_code, token_type=token_type, token_call=token_call, callback=callback
+        company=company_code, token_call=token_call, callback=callback
     ))
 
 

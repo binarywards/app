@@ -3,8 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <title>Bina Rywards</title>
-    <!--Import Font Awsome-->
-    <script src="https://use.fontawesome.com/cad94addce.js"></script>
     <!-- link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" -->
     <link href="css/font-awesome.min.css" rel="stylesheet">
     <link href="css/styles.css" rel="stylesheet">
@@ -48,12 +46,12 @@
     <li class="subheader company_logged company_name">Company</li>
     <li class="menu company_logged">
         <a href="#dashboard" class="white-text" onclick="switch_page(this.hash)">
-            <i class="fa fa-info white-text"></i> Dashboard
+            <i class="fa fa-th white-text"></i> Dashboard
         </a>
     </li>
     <li class="menu company_logged">
         <a href="#campaigns" class="white-text" onclick="switch_page(this.hash)">
-            <i class="fa fa-info white-text"></i> Campaigns
+            <i class="fa fa-connectdevelop white-text"></i> Campaigns
         </a>
     </li>
     <li class="subheader">About us</li>
@@ -240,19 +238,51 @@
             </div>
             <div class="row">
                 <h5 class="col s6 right-align"><i class="fa fa-credit-card-alt"></i> Balance: </h5>
-                <h5 class="col s6 left-align">KES 1200</h5>
+                <h5 class="col s6 left-align company_balance">KES <span class="company_balance">0.00</span></h5>
             </div>
             <ul class="collapsible" data-collapsible="accordion">
                 <li>
                     <div class="collapsible-header"><i class="fa fa-address-card-o"></i>Company profile</div>
                     <div class="collapsible-body">
-                        <form>
-                        <p>Company Name: <span> </span></p>
-                        <p>Company Code:<span></span></p>
-                        <p>Email Address: <span></span></p>
-                        <p>Telephone: <span> </span></p>
-
-                        <p>Change Password</p>
+                        <form class="row">
+                            <div class="input-field col s12 m9 l10">
+                                <i class="fa fa-industry prefix"></i>
+                                <input type="text" class="validate company_name" id="txt_company_name_update">
+                                <label for="txt_company_name_update">Company Name</label>
+                            </div>
+                            <div class="input-field col s6 offset-s2 m3 l2">
+                                <input type="text" class="validate company_code disabled" id="txt_company_code" readonly>
+                                <label for="txt_company_code">Company Code</label>
+                            </div>
+                            <div class="input-field col s12">
+                                <i class="fa fa-envelope-o prefix"></i>
+                                <input type="email" class="validate company_email disabled" id="txt_company_email">
+                                <label for="txt_company_email">Company Email</label>
+                            </div>
+                            <div class="input-field col s12">
+                                <i class="fa fa-phone prefix"></i>
+                                <input type="tel" class="validate company_phone disabled" id="txt_company_phone">
+                                <label for="txt_company_phone">Company Phone</label>
+                            </div>
+                            <p class="center col s12">
+                                <strong>Update Password</strong>
+                                <br> The password will be automatically updated if the new and confirmation passwords match
+                            </p>
+                            <div class="input-field col s12">
+                                <i class="fa fa-key prefix"></i>
+                                <input type="password" class="validate disabled" id="txt_company_pass_old">
+                                <label for="txt_company_pass_old">Old Password</label>
+                            </div>
+                            <div class="input-field col s12 m6">
+                                <i class="fa fa-key prefix"></i>
+                                <input type="password" class="validate disabled" id="txt_company_pass_new">
+                                <label for="txt_company_pass_new">New Password</label>
+                            </div>
+                            <div class="input-field col s12 m6">
+                                <i class="fa fa-key prefix"></i>
+                                <input type="password" class="validate disabled" id="txt_company_pass_conf">
+                                <label for="txt_company_pass_conf">Confirm Password</label>
+                            </div>
                         </form>
                     </div>
                 </li>
@@ -266,7 +296,7 @@
                 </li>
             </ul>
             <div class="col s12 center">
-                <button class=" btn amber darken-4 white-text"> Logout</button>
+                <button class="btn amber darken-4 white-text" onclick="logout();"> Logout</button>
             </div>
     </div>
     </div>
@@ -282,8 +312,8 @@
                 </a></span>
         </div>
         <div id="camp_content_header" class="col s12 m7 amber darken-4 row hide-on-small-and-down" style="margin-bottom: 0 !important;">
-            <span class="col s1 hide-on-med-and-up center">
-                <a class="white btn btn-floating center" style="margin-top: 3px;" href="#campaigns/home" onclick="switch_page(this.hash)">
+            <span class="col s1 hide-on-med-and-up left-align" style="padding-left: 0; margin-left: 0;">
+                <a class="white btn btn-floating" style="margin-top: 3px; padding-left: 0; margin-left: 0;" href="#campaigns/home" onclick="switch_page(this.hash)">
                     <i class="fa fa-chevron-left amber-text text-darken-4"></i>
                 </a>
             </span>
@@ -291,9 +321,8 @@
         </div>
         <div id="camp_list" class="col s12 m5" style="border-right: 1px solid #ff6f00; margin-bottom: 0 !important;">
             <div class="amber-text text-darken-4">
-                <ul class="collection">
-                    <li class="collection-item"><a class="amber-text text-darken-4" href="#campaigns" onclick="open_campaign(null)">Buy one get one free</a>
-                    </li>
+                <ul class="collection" id="camp_list_actual">
+
                     <li class="collection-item active"><a class="white-text text-darken-4" href="#campaigns" onclick="open_campaign(null)">Shabiki Reloads</a>
                     </li>
                 </ul>
@@ -303,7 +332,7 @@
         <div id="camp_content_new" style="margin-bottom: 0 !important;" class="col s12 m7 amber-text text-darken-4 hide-on-small-and-down">
             <div class="row " id="campaign_registration">
                 <h5 class="col s12 center">New Campaign</h5>
-                <form class="col s12" action="javascript:{ add_campaign(); }">
+                <form class="col s12" name="new_campaign" action="javascript:{ add_campaign(); }">
                     <div class="row flex">
                         <div class="input-field col s12">
                             <i class="fa fa-newspaper-o prefix amber-text text-darken-4"></i>
@@ -337,12 +366,17 @@
                 </form>
             </div>
         </div>
+
         <div id="camp_content" style="margin-bottom: 0 !important;" class="col s12 m7 amber-text text-darken-4 d-none hide-on-small-and-down">
             <div class="row" id="read_campaign" >
                 <div class="amber-text text-darken-4 col s12">
                     <h4 class="center campaign_name" style="margin-bottom: 2px !important;">Campaign Name</h4>
-                    <p class="center flow-text semi-bold campaign_code" style="margin-top: 0 !important;">(<span>CODE</span>)</p>
-                    <p class="center flow-text">Spent: KES 1200.00</p>
+                    <p class="center flow-text semi-bold" style="margin-top: 0 !important;">(<span class="campaign_code">CODE</span>)</p>
+                    <p class="center flow-text">Spent: KES <span class="campaign_spend"></span></p>
+                    <div class="row">
+                        <span class="col s5 center"><a href="" class="ul amber-text text-darken-4 current_page">Add Tokens</a></span>
+                        <span class="col s7 center"><a href="" class="ul amber-text text-darken-4 current_page">View Token history</a></span>
+                    </div>
                     <ul class="collapsible" data-collapsible="accordion">
                         <li>
                             <div class="collapsible-header">Campaign Details</div>
@@ -350,12 +384,12 @@
                                 <form class="row">
                                     <div class="input-field col s12">
                                         <i class="fa fa-industry prefix"></i>
-                                        <input value="" id="updateCampaignName" type="text" class="validate">
+                                        <input value="" id="updateCampaignName" type="text" class="validate campaign_name">
                                         <label for="updateCampaignName">Name</label>
                                     </div>
                                     <div class="input-field col s12">
                                         <i class="fa fa-envelope-o prefix"></i>
-                                        <textarea id="updateCampaignDescription" type="text" class="materialize-textarea validate"></textarea>
+                                        <textarea id="updateCampaignDescription" type="text" class="materialize-textarea validate campaign_desc"></textarea>
                                         <label for="updateCampaignDescription">Description</label>
                                     </div>
                                 </form>
@@ -367,30 +401,46 @@
                                 <form class="row">
                                     <div class="input-field col s12">
                                         <i class="fa fa-link prefix"></i>
-                                        <input type="url" class="validate" id="updateCallback" title="">
-                                        <label for="updateCallback">Call Back Url</label>
+                                        <input type="url" class="validate campaign_call" id="updateCallback" title="">
+                                        <label class="semi-bold" for="updateCallback">Call Back Url</label>
                                     </div>
-                                    <small>
+                                    <p class="small col s12">
                                         This url will be called after the user redeems the token, leave blank if you don't need this.
                                         The data sent includes: (phone_number, redeemed_code, campaign_code, reward_type, reward_amount)
-                                    </small>
+                                    </p>
+                                    <div class="input-field col s12">
+                                        <i class="fa fa-link prefix"></i>
+                                        <input type="url" class="validate campaign_reward" id="updateTokenCall" title="">
+                                        <label class="semi-bold" for="updateCallback">Reward Url</label>
+                                    </div>
+                                    <p class="small col s12">
+                                        This url is called when a user tries to redeem a token that is not saved in our system.
+                                        This allows you to dynamically generate your own tokens and we will be checking from your server for the new tokens as necessary.
+                                        Data sent includes: (phone_number, token(code to be redeemed), campaign_code, company_code)
+                                    </p>
                                 </form>
                             </div>
                         </li>
                         <li>
                             <div class="collapsible-header">Messages</div>
-                            <div class="collapsible-body">
-                                <div class="row s12">
-                                    <div class="col s12"><i class="fa fa-history"></i> Tokens history </div>
+                            <div class="collapsible-body row">
+                                <div class="input-field col s12">
+                                    <i class="fa fa-envelope prefix"></i>
+                                    <textarea class="materialize-textarea campaign_message" id="updateMessage"></textarea>
+                                    <label for="updateMessage">Message</label>
                                 </div>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="collapsible-header">Token Details</div>
-                            <div class="collapsible-body">
-                                <div class="row s12">
-                                    <div class="col s12"><i class="fa fa-history"></i> Tokens history </div>
+                                <p class="small col s12">This message is sent once the user receives the reward</p>
+                                <div class="input-field col s12">
+                                    <i class="fa fa-envelope prefix"></i>
+                                    <textarea class="materialize-textarea campaign_custom" id="updateCustom"></textarea>
+                                    <label for="updateCustom">Custom Message</label>
                                 </div>
+                                <p class="small col s12">This message is sent when the reward you want to provide is not available in our system.</p>
+                                <p class="flow-text">
+                                    If you wish to include custom fields in the message just add the field in square brackets and we will appropriately replace them<br>
+                                    e.g. [phone] = 07xxxxxxxx, [request_id], [reward], [amount], more fields coming...<br>
+                                    This applies for both custom and normal messages.
+                                </p>
                             </div>
                         </li>
                     </ul>
@@ -409,6 +459,8 @@
     </div>
 </footer>
 
+<!--Import Font Awsome-->
+<script src="https://use.fontawesome.com/cad94addce.js"></script>
 
 <!--Import jQuery before materialize.js-->
 <script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
@@ -488,9 +540,18 @@
                 }
             }
         }
+        var links = document.querySelectorAll('.current_page');
+        for (var i in links) {
+            var link = links[i];
+            if (link.href == undefined)
+                continue;
+            link.href = full_path;
+        }
         // Reinitialize tabs that were otherwise hidden
         $('ul.tabs').tabs();
     }
+
+    document.querySelector("#preloader").classList.add('d-none');
 
     var path_sent = window.location.hash.split("/");
 
@@ -508,10 +569,6 @@
             first = false;
             break;
     }
-</script>
-
-<script>
-    document.querySelector("#preloader").classList.add('d-none');
 </script>
 </body>
 </html>

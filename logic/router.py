@@ -47,14 +47,29 @@ def actions():
             "headers": [],
             "function": comp.company_login
         },
+        "company_campaigns": {
+            "description": "Read campaigns of a specific company",
+            "method": "GET",
+            "parameters": [],
+            "headers": ['token', 'company_code'],
+            "function": comp.read_campaigns
+        },
+        "company_campaign": {
+            "description": "Open a campaign and get it's details",
+            "method": "GET",
+            "parameters": ['campaign_code'],
+            "headers": ['token', 'company_code'],
+            "function": comp.read_campaign
+        },
         "company_new_campaign": {
             "description": "Adds a new campaign by an organization",
             "method": "POST",
-            "parameters": ['company_code', 'campaign_name', 'campaign_code', 'message', 'custom_message', 'details', 'callback', 'token_call', 'token_type'],
+            "parameters": ['company_code', 'campaign_name', 'campaign_code', 'message', 'custom_message', 'details',
+                           'callback', 'token_call', 'token'],
             "headers": [],
             "function": comp.add_campaign
         },
-        "our_rewards_call": {
+        "rewards_call": {
             "description": "Will check if a specified token exists in our system",
             "method": "POST",
             "parameters": ['company_code', 'token', 'campaign_code', 'phone'],

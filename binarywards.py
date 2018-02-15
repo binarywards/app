@@ -65,6 +65,8 @@ def before_request():
         data_sent = request.json
     else:
         data_sent = request.form
+        if request.method == 'GET':
+            data_sent = request.args
 
 
 @app.route('/')
@@ -76,7 +78,7 @@ def index():
 
 @app.route('/logo')
 def logo():
-    return send_from_directory(app.static_folder, 'img/royals.png')
+    return send_from_directory(app.static_folder, 'img/logo.png')
 
 
 # serve files from root url instead of static directory
@@ -115,6 +117,7 @@ def api_actions(api_action):
             out["method"] = method
             if request.method == method:
                 success, args = handle_parameters(params, headers)
+
                 if success:
                     if "function" in actions[api_action]:
                         out, status = actions[api_action]["function"](**args)
@@ -131,8 +134,8 @@ def api_actions(api_action):
         else:
             status = status_code.not_found
             out["message"] = "Unknown action, please check: "+url_for("/api")
-    except Exception:
-        utils.async_logger("API action error:", traceback.format_exc(4))
+    except Exception as error:
+        utils.async_logger(str(error), traceback.format_exc(4))
         out["message"] = "An error occurred"
     return Response(dict_to_json(out), content_type="text/json"), status
 

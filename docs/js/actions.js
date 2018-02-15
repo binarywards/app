@@ -114,22 +114,64 @@ var redeem_code = function () {
     });
 };
 
-var open_campaign = function (compaign_code) {
+var open_campaign = function (campaign_code, silent) {
+    if(silent ===undefined || silent === null)
+        silent = false;
+    if(!silent)
+        start_loading();
+    var token = window.sessionStorage.getItem('auth_token');
+    var code = window.sessionStorage.getItem('company_code');
+
     var camp_list_header = document.querySelector("#camp_list_header");
     var camp_list = document.querySelector("#camp_list");
     var camp_content_header = document.querySelector("#camp_content_header");
     var camp_content_new = document.querySelector("#camp_content_new");
     var camp_content = document.querySelector("#camp_content");
 
-    if(camp_content_header.classList.contains("hide-on-small-and-down"))
-        camp_content_header.classList.remove("hide-on-small-and-down");
-    if(camp_content.classList.contains("hide-on-small-and-down"))
-        camp_content.classList.remove("hide-on-small-and-down");
-    if(camp_content.classList.contains("d-none"))
-        camp_content.classList.remove("d-none");
-    camp_content_new.classList.add("d-none");
-    camp_list_header.classList.add("hide-on-small-and-down");
-    camp_list.classList.add("hide-on-small-and-down");
+    ajax({
+        url: "api/company_campaign",dataType: "json",
+        data: {
+            campaign_code: campaign_code
+        },
+        headers: {
+            token: token,
+            company_code: code
+        },
+        success: function (response) {
+            if(response.success){
+                fill_class('.campaign_name', response.message['name']);
+                fill_class('.campaign_code', response.message['campaign_code']);
+                fill_class('.campaign_desc', response.message['details']);
+                fill_class('.campaign_spend', response.message['total_spent'].toFixed(3));
+                fill_class('.campaign_call', response.message['callback']);
+                fill_class('.campaign_message', response.message['message']);
+                fill_class('.campaign_custom', response.message['custom_message']);
+                fill_class('.campaign_reward', response.message['token_call']);
+
+                if(camp_content_header.classList.contains("hide-on-small-and-down"))
+                    camp_content_header.classList.remove("hide-on-small-and-down");
+                if(camp_content.classList.contains("hide-on-small-and-down"))
+                    camp_content.classList.remove("hide-on-small-and-down");
+                if(camp_content.classList.contains("d-none"))
+                    camp_content.classList.remove("d-none");
+                camp_content_new.classList.add("d-none");
+                camp_list_header.classList.add("hide-on-small-and-down");
+                camp_list.classList.add("hide-on-small-and-down");
+                stop_loading();
+            }else{
+                toast(response.message);
+            }
+            stop_loading();
+        },
+        error: function (error) {
+            var response = error.responseJSON;
+            if(response === undefined){
+                response = JSON.parse(error.responseText);
+            }
+            toast(response.message);
+            stop_loading();
+        }
+    });
 };
 var close_campaign = function () {
     var camp_list_header = document.querySelector("#camp_list_header");
@@ -207,7 +249,12 @@ var company_visuals = function() {
                 item.classList.remove('d-none');
             }
         }
+        fetch_campaigns(true);
         fill_class('.company_name', window.sessionStorage.getItem("name"), false);
+        fill_class('.company_code', window.sessionStorage.getItem("company_code"), false);
+        fill_class('.company_balance', window.sessionStorage.getItem("balance"), false);
+        fill_class('.company_email', window.sessionStorage.getItem("email"), false);
+        fill_class('.company_phone', window.sessionStorage.getItem("phone"), false);
     }else{
         for (pos in items) {
             item = items[pos];
@@ -218,7 +265,7 @@ var company_visuals = function() {
     }
 };
 
-function signUp() {
+var signUp = function() {
     start_loading();
     var companyCode = document.querySelector('#companyCode').value;
     var companyName = document.querySelector('#companyName').value;
@@ -262,9 +309,9 @@ function signUp() {
 
     });
 
-}
+};
 
-function logIn() {
+var logIn = function() {
     var company_code = document.querySelector("#company_code").value;
     var password = document.querySelector("#password").value;
     start_loading();
@@ -301,18 +348,117 @@ function logIn() {
             toast(response.message);
             stop_loading();
         }
-
     })
-}
+};
+
+var update_company = function (key, value) {
+
+};
+
+var clear = function(element) {
+    while(element.hasChildNodes()){
+        element.removeChild(element.lastChild);
+    }
+};
+
+var fetch_campaigns = function(silent){
+    if(silent ===undefined || silent === null)
+        silent = false;
+    if(!silent)
+        start_loading();
+    var token = window.sessionStorage.getItem('auth_token');
+    var code = window.sessionStorage.getItem('company_code');
+    ajax({
+        url: "api/company_campaigns",
+        dataType: "json",
+        headers: {
+            token: token,
+            company_code: code
+        },
+        success: function (response) {
+            if(response.success){
+                var campaigns = response.message;
+                var camp_list = document.querySelector('#camp_list_actual');
+                clear(camp_list);
+                for(var i in campaigns){
+                    var campaign = campaigns[i];
+                    var li = document.createElement('li');
+                    var a = document.createElement('a');
+                    li.classList.add('collection-item');
+                    a.className = 'amber-text text-darken-4';
+                    a.href = '#campaigns/' + campaign['campaign_code'];
+                    a.setAttribute('onclick', "open_campaign('" + campaign['campaign_code'] + "')");
+                    a.appendChild(new Text(campaign['campaign_code'] + " : " +  campaign['name']));
+                    a.title =  campaign['details'];
+                    li.appendChild(a);
+                    camp_list.appendChild(li);
+                }
+                stop_loading();
+            }else{
+                toast(response.message);
+            }
+            stop_loading();
+        },
+        error: function (error) {
+            var response = error.responseJSON;
+            if(response === undefined){
+                response = JSON.parse(error.responseText);
+            }
+            toast(response.message);
+            stop_loading();
+        }
+    });
+};
 
 var add_campaign = function(){
+    start_loading();
     var campaignCode = document.querySelector("#campaignCode").value;
     var campaignName = document.querySelector("#campaignName").value;
-    var message = document.querySelector("#message").value;
-    var description = document.querySelector("#message").value;
-    var customMessage = document.querySelector("#customMessage").value;
+    var description = document.querySelector("#description").value;
     var callBack = document.querySelector("#callBack").value;
     var rywardCalls = document.querySelector("#rywardCalls").value;
-    var rywardType = document.querySelector("#rywardType").value;
-    // company_code, campaign_name, campaign_code, message, custom_message, details, callback, token_call, token_type, token
+    // company_code, campaign_name, campaign_code, message, custom_message, details, callback, token_call, token
+    ajax({
+        url: "api/company_new_campaign",
+        type: "POST",
+        data: {
+            company_code: window.sessionStorage.getItem('company_code'),
+            token: window.sessionStorage.getItem('auth_token'),
+            campaign_name: campaignName,
+            campaign_code: campaignCode,
+            message: '',
+            custom_message: '',
+            details: description,
+            token_call: rywardCalls,
+            callback: callBack
+        },
+        dataType: 'json',
+        success: function (response) {
+            if(response.success){
+                toast(response.message);
+                document.forms.new_campaign.reset();
+                toast("Refreshing campaigns...");
+                fetch_campaigns();
+            }else{
+                toast(response.message);
+            }
+            stop_loading();
+        },
+        error: function (error) {
+            var response = error.responseJSON;
+            if(response === undefined){
+                response = JSON.parse(error.responseText);
+            }
+            toast(response.message);
+            stop_loading();
+        }
+    });
+};
+
+var logout = function () {
+    var token = window.sessionStorage.getItem('auth_token');
+    var code = window.sessionStorage.getItem('company_code');
+    window.sessionStorage.clear();
+    company_visuals();
+    switch_page('#home');
 };

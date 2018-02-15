@@ -13,12 +13,51 @@ class company:
         self.db = database.db
         self.gateway = at_gateway(username=os.environ.get('at_user'), api_key=os.environ.get('at_key'))
 
+    def add_login_details(self, company_code, token):
+        self.db.child('app').child('companies').child(company_code). \
+            child('login_records').child(token).set(dict(time=utils.human_date(), active=True))
+        self.db.child('app').child('companies').child(company_code). \
+            child('login_records').child(token).child('history'). \
+            push(dict(time=utils.human_date(), action='User logged in.'))
+
     def logged_in(self, company_code, token):
-        if self.db.child('app').child('companies').child(company_code).\
-                        child('logins').child(token).get().val() is not None:
-            return True
+        record = self.db.child('app').child('companies').child(company_code).\
+                        child('login_records').child(token).get().val()
+        if record is not None:
+            if record["active"]:
+                return True
+            else:
+                return False
         else:
             return False
+
+    def update_password(self, company_code, old_password, new_password):
+        status = utils.status_code.system_error
+        message = "Unknown error occurred, please retry"
+        success = False
+        try:
+            comp = self.db.child('app').child('companies').child(company_code).child('details').get().val()
+            if comp is not None:
+                password = utils.sha256(old_password)
+                if comp['password'] == password:
+                    if new_password is not None and len(new_password) >= 8:
+                        self.db.child('app').child('companies').child(company_code).child('details').\
+                            update(dict(password=utils.sha256(new_password)))
+                        message = "Password updated"
+                        status = utils.status_code.success
+                        success = True
+                    else:
+                        message = "Invalid password, password must be at least 8 characters"
+                        status = utils.status_code.invalid_data
+                else:
+                    status = utils.status_code.forbidden
+                    message = "Wrong password"
+            else:
+                message = "Company does not exist"
+                status = utils.status_code.not_found
+        except Exception as error:
+            utils.async_logger(str(error), traceback.format_exc(4))
+        return utils.api_return(success, message, status)
 
     def company_login(self, company_code, password):
         status = utils.status_code.system_error
@@ -30,10 +69,11 @@ class company:
                 password = utils.sha256(password)
                 if comp['password'] == password:
                     # Generate a token
-                    token = utils.random_string(16)
-                    self.db.child('app').child('companies').child(company_code).\
-                        child('logins').child(token).set(dict(time=utils.human_date()))
-                    message = token
+                    import string
+                    token = utils.random_string(16, string.ascii_letters + string.digits)
+                    utils.run_in_background(self.add_login_details, company_code=company_code, token=token)
+                    message = dict(token=token, name=comp['name'], email=comp['email'],
+                                   balance=comp['balance'], phone=comp['phone'])
                     status = utils.status_code.success
                     success = True
                 else:
@@ -57,17 +97,21 @@ class company:
                     if company_code is not None and str(company_code).isalpha() and len(company_code)<=6:
                         existing_company = self.db.child("app").child("companies").child(company_code).get().val()
                         if existing_company is None:
-                            database.create_company(email, phone, password, name, company_code)
-                            custom = utils.random_string(6, "0123456789")
-                            database.add_custom_token(custom, 'Airtime', '20')
-                            params = dict(to=phone, message="Welcome to Bina Rywards." +
-                                          "\nUse the welcome token below to receive KES 20 airtime" +
-                                          " from our website.\nToken: BINA "+str(custom)+"\nOr " +
-                                          "visit: https://binarywards.tech/#redeem/BINA/"+str(custom)+"\n")
-                            utils.run_in_background(self.gateway.send_message, **params)
-                            status = utils.status_code.success
-                            success = True
-                            message = name + "(" + company_code + ")" + " Added successfully"
+                            if len(str(password)) >= 8:
+                                database.create_company(email, phone, password, name, company_code)
+                                custom = utils.random_string(6, "0123456789")
+                                database.add_custom_token(custom, 'Airtime', '20')
+                                params = dict(to=phone, message="Welcome to Bina Rywards." +
+                                              "\nUse the welcome token below to receive KES 20 airtime" +
+                                              " from our website.\nToken: BINA "+str(custom)+"\nOr " +
+                                              "visit: https://binarywards.tech/#redeem/BINA/"+str(custom)+"\n")
+                                utils.run_in_background(self.gateway.send_message, **params)
+                                status = utils.status_code.success
+                                success = True
+                                message = name + "(" + company_code + ")" + " Added successfully"
+                            else:
+                                message = "Invalid password, password must be at least 8 characters"
+                                status = utils.status_code.invalid_data
                         else:
                             status = utils.status_code.forbidden
                             message = "Company code " + str(company_code) + " already exists"
@@ -85,7 +129,7 @@ class company:
         return utils.api_return(success, message, status)
 
     def add_campaign(self, company_code, campaign_name, campaign_code, message, custom_message, details,
-                    callback, token_call, token_type, token):
+                    callback, token_call, token):
         status = utils.status_code.system_error
         camp_message = message
         message = "Unknown error occurred, please retry"
@@ -97,7 +141,7 @@ class company:
                     if self.db.child('app').child('companies').child(company_code).get().val() is not None:
                         database.create_campaign(company_code,
                                                  campaign_name, campaign_code, camp_message, custom_message, details, callback,
-                                                 token_call, token_type)
+                                                 token_call)
                         message = "Campaign " + str(campaign_name) + "Added successfully"
                         success = True
                         status = utils.status_code.success
@@ -124,7 +168,14 @@ class company:
                     campaigns = self.db.child('app').child('companies').child(company_code).child('campaigns').get().val()
                     if campaigns is None:
                         campaigns = dict()
-                    message = campaigns
+                    message = []
+                    for key in campaigns.keys():
+                        message.append(dict(
+                            campaign_code=key,
+                            custom_message=campaigns[key]['custom_message'],
+                            details=campaigns[key]['details'],
+                            message=campaigns[key]['message'],
+                            name=campaigns[key]['name']))
                     success = True
                     status = utils.status_code.success
                 else:
@@ -145,9 +196,17 @@ class company:
                 current = self.db.child('app').child('campaigns').child(campaign_code).get().val()
                 if current is not None:
                     if self.db.child('app').child('companies').child(company_code).get().val() is not None:
-                        campaigns = self.db.child('app').child('companies').child(company_code).\
+                        campaign = self.db.child('app').child('companies').child(company_code).\
                             child('campaigns').child(campaign_code).get().val()
-                        message = campaigns
+                        message = dict()
+                        message['name'] = campaign['name']
+                        message['campaign_code'] = campaign_code
+                        message['details'] = campaign['details']
+                        message['message'] = campaign['message']
+                        message['custom_message'] = campaign['custom_message']
+                        message['callback'] = current['callback']
+                        message['token_call'] = current['token_call']
+                        message['total_spent'] = utils.fill_default(current, 'total_spent', 0)
                         success = True
                         status = utils.status_code.success
                     else:

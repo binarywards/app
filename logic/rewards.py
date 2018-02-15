@@ -32,6 +32,8 @@ class rewards:
                             child('campaigns').child(campaign_code).child('tokens').child(redemptionCode).get().val()
                         if token is not None:
                             campaign["token_type"] = 'stored'
+                        else:
+                            campaign["token_type"] = 'refer'
                         # set whether to continue rewarding the token
                         cont = False
                         # Check the type of token:
