@@ -1,8 +1,70 @@
+/* Presentation mode */
+var current_slide = 1;
+var before = '#home';
+function presentation_mode(e) {
+    var ctrlPressed;
+    var altPressed;
+
+    var evt = (e == null ? event : e);
+
+    altPressed = evt.altKey;
+    ctrlPressed = evt.ctrlKey;
+    var total = 5;
+    // Toggle Presentation mode
+    if ((altPressed && ctrlPressed && evt.keyCode === 80)) {
+        if(document.querySelector("#presentation").classList.contains('d-none')){
+            before = window.location.hash;
+            switch_page("#presentation");
+        }else{
+            switch_page(before);
+        }
+    }
+
+    // Next Slide
+    if ((altPressed && ctrlPressed && evt.keyCode === 78)) {
+        if(!document.querySelector("#presentation").classList.contains('d-none')) {
+            hide_all_slides();
+            var next = current_slide + 1;
+            if (next > total) {
+                next -= total;
+            }
+            current_slide = next;
+            document.querySelector("#slide_"+next).classList.remove('d-none');
+            Materialize.toast("Slide "+next+" of "+total, 2500);
+        }
+    }
+    // Prevoius Slide
+    if ((altPressed && ctrlPressed && evt.keyCode === 66)) {
+        if(!document.querySelector("#presentation").classList.contains('d-none')) {
+            hide_all_slides();
+            var prev = current_slide - 1;
+            if (prev < 1) {
+                prev += total;
+            }
+            current_slide = prev;
+            document.querySelector("#slide_"+prev).classList.remove('d-none');
+            Materialize.toast("Slide "+prev+" of "+total, 2500);
+        }
+    }
+    return true;
+}
+
+var hide_all_slides = function () {
+    document.querySelector("#slide_1").classList.add('d-none');
+    document.querySelector("#slide_2").classList.add('d-none');
+    document.querySelector("#slide_3").classList.add('d-none');
+    document.querySelector("#slide_4").classList.add('d-none');
+    document.querySelector("#slide_5").classList.add('d-none');
+};
+
+document.onkeydown = presentation_mode;
+
 /* script to manipulate the interface events*/
 var ajax = function (options) {
-    function setDefaultVal(value, defaultValue){
+    function setDefaultVal(value, defaultValue) {
         return (value === undefined) ? defaultValue : value;
     }
+
     var settings = {
         url: setDefaultVal(options.url, ""),
         type: setDefaultVal(options.type, "GET"),
@@ -17,7 +79,7 @@ var ajax = function (options) {
         })
     };
     // Can implement multiple methods of Ajax
-    if(Window.fetch) {
+    if (Window.fetch) {
         var data = new FormData();
         if (settings.data !== undefined) {
             Object.keys(settings.data).forEach(function (key) {
@@ -48,7 +110,7 @@ var ajax = function (options) {
             method: settings.type,
             body: data
         }).then(checkStatus).then(parseData).then(settings.success).catch(settings.error)
-    }else{
+    } else {
         $.ajax(settings);
     }
 };
@@ -61,12 +123,12 @@ var print = function (data) {
 var server = "https://binarywards.herokuapp.com/";
 
 var toast = function (message) {
-    Materialize.toast(message, 10000)
+    Materialize.toast(message, 10000);
 };
 
 
 var start_loading = function () {
-    if(document.querySelector("#preloader").classList.contains('d-none')){
+    if (document.querySelector("#preloader").classList.contains('d-none')) {
         document.querySelector("#preloader").classList.remove('d-none');
     }
 };
@@ -75,7 +137,7 @@ var stop_loading = function () {
     document.querySelector("#preloader").classList.add('d-none');
 };
 
-var update_title = function(title) {
+var update_title = function (title) {
     document.querySelector('title').innerText = "Bina Rywards - " + title;
 };
 
@@ -105,7 +167,7 @@ var redeem_code = function () {
         },
         error: function (error) {
             var response = error.responseJSON;
-            if(error.responseJSON === undefined){
+            if (error.responseJSON === undefined) {
                 response = JSON.parse(error.responseText);
             }
             toast(response.message);
@@ -115,9 +177,9 @@ var redeem_code = function () {
 };
 
 var open_campaign = function (campaign_code, silent) {
-    if(silent ===undefined || silent === null)
+    if (silent === undefined || silent === null)
         silent = false;
-    if(!silent)
+    if (!silent)
         start_loading();
     var token = window.sessionStorage.getItem('auth_token');
     var code = window.sessionStorage.getItem('company_code');
@@ -129,7 +191,7 @@ var open_campaign = function (campaign_code, silent) {
     var camp_content = document.querySelector("#camp_content");
 
     ajax({
-        url: "api/company_campaign",dataType: "json",
+        url: "api/company_campaign", dataType: "json",
         data: {
             campaign_code: campaign_code
         },
@@ -138,7 +200,7 @@ var open_campaign = function (campaign_code, silent) {
             company_code: code
         },
         success: function (response) {
-            if(response.success){
+            if (response.success) {
                 fill_class('.campaign_name', response.message['name']);
                 fill_class('.campaign_code', response.message['campaign_code']);
                 fill_class('.campaign_desc', response.message['details']);
@@ -148,24 +210,24 @@ var open_campaign = function (campaign_code, silent) {
                 fill_class('.campaign_custom', response.message['custom_message']);
                 fill_class('.campaign_reward', response.message['token_call']);
 
-                if(camp_content_header.classList.contains("hide-on-small-and-down"))
+                if (camp_content_header.classList.contains("hide-on-small-and-down"))
                     camp_content_header.classList.remove("hide-on-small-and-down");
-                if(camp_content.classList.contains("hide-on-small-and-down"))
+                if (camp_content.classList.contains("hide-on-small-and-down"))
                     camp_content.classList.remove("hide-on-small-and-down");
-                if(camp_content.classList.contains("d-none"))
+                if (camp_content.classList.contains("d-none"))
                     camp_content.classList.remove("d-none");
                 camp_content_new.classList.add("d-none");
                 camp_list_header.classList.add("hide-on-small-and-down");
                 camp_list.classList.add("hide-on-small-and-down");
                 stop_loading();
-            }else{
+            } else {
                 toast(response.message);
             }
             stop_loading();
         },
         error: function (error) {
             var response = error.responseJSON;
-            if(response === undefined){
+            if (response === undefined) {
                 response = JSON.parse(error.responseText);
             }
             toast(response.message);
@@ -180,9 +242,9 @@ var close_campaign = function () {
     var camp_content_new = document.querySelector("#camp_content_new");
     var camp_content = document.querySelector("#camp_content");
 
-    if(camp_list_header.classList.contains("hide-on-small-and-down"))
+    if (camp_list_header.classList.contains("hide-on-small-and-down"))
         camp_list_header.classList.remove("hide-on-small-and-down");
-    if(camp_list.classList.contains("hide-on-small-and-down"))
+    if (camp_list.classList.contains("hide-on-small-and-down"))
         camp_list.classList.remove("hide-on-small-and-down");
     camp_content_new.classList.add("hide-on-small-and-down");
     camp_content_header.classList.add("hide-on-small-and-down");
@@ -195,11 +257,11 @@ var new_campaign = function () {
     var camp_content_new = document.querySelector("#camp_content_new");
     var camp_content = document.querySelector("#camp_content");
 
-    if(camp_content_header.classList.contains("hide-on-small-and-down"))
+    if (camp_content_header.classList.contains("hide-on-small-and-down"))
         camp_content_header.classList.remove("hide-on-small-and-down");
-    if(camp_content_new.classList.contains("hide-on-small-and-down"))
+    if (camp_content_new.classList.contains("hide-on-small-and-down"))
         camp_content_new.classList.remove("hide-on-small-and-down");
-    if(camp_content_new.classList.contains("d-none"))
+    if (camp_content_new.classList.contains("d-none"))
         camp_content_new.classList.remove("d-none");
     camp_content.classList.add("d-none");
     camp_list_header.classList.add("hide-on-small-and-down");
@@ -208,7 +270,7 @@ var new_campaign = function () {
 
 var dummy_login = function () {
     window.sessionStorage.setItem("company_code", "BINA");
-    window.sessionStorage.setItem("auth_token","begufvdgg87438y4figf87873gfe87");
+    window.sessionStorage.setItem("auth_token", "begufvdgg87438y4figf87873gfe87");
     window.sessionStorage.setItem("email", "me@billcountry.tech");
     window.sessionStorage.setItem("balance", 10);
     window.sessionStorage.setItem("name", "Bina Rywards");
@@ -221,26 +283,26 @@ var company_logged_in = function () {
     return company_code !== null && auth_token !== null;
 };
 
-var fill_class = function(_class, data){
+var fill_class = function (_class, data) {
     var items = document.querySelectorAll(_class);
-    for(var pos in items) {
+    for (var pos in items) {
         var item = items[pos];
         if (item.classList === undefined)
             continue;
         var tag = item.tagName.toLocaleLowerCase();
-        if(tag === "input" || tag === "textarea"){
+        if (tag === "input" || tag === "textarea") {
             item.value = data;
-        }else{
+        } else {
             item.innerHTML = data;
         }
     }
 };
 
-var company_visuals = function() {
+var company_visuals = function () {
     var items = document.querySelectorAll('.company_logged');
     var logged = company_logged_in();
     var pos, item;
-    if(logged) {
+    if (logged) {
         for (pos in items) {
             item = items[pos];
             if (item.classList === undefined)
@@ -255,7 +317,7 @@ var company_visuals = function() {
         fill_class('.company_balance', window.sessionStorage.getItem("balance"), false);
         fill_class('.company_email', window.sessionStorage.getItem("email"), false);
         fill_class('.company_phone', window.sessionStorage.getItem("phone"), false);
-    }else{
+    } else {
         for (pos in items) {
             item = items[pos];
             if (item.classList === undefined)
@@ -265,7 +327,7 @@ var company_visuals = function() {
     }
 };
 
-var signUp = function() {
+var signUp = function () {
     start_loading();
     var companyCode = document.querySelector('#companyCode').value;
     var companyName = document.querySelector('#companyName').value;
@@ -300,7 +362,7 @@ var signUp = function() {
         },
         error: function (error) {
             var response = error.responseJSON;
-            if(error.responseJSON === undefined){
+            if (error.responseJSON === undefined) {
                 response = JSON.parse(error.responseText);
             }
             toast(response.message);
@@ -311,7 +373,7 @@ var signUp = function() {
 
 };
 
-var logIn = function() {
+var logIn = function () {
     var company_code = document.querySelector("#company_code").value;
     var password = document.querySelector("#password").value;
     start_loading();
@@ -342,7 +404,7 @@ var logIn = function() {
         },
         error: function (error) {
             var response = error.responseJSON;
-            if(error.responseJSON === undefined){
+            if (error.responseJSON === undefined) {
                 response = JSON.parse(error.responseText);
             }
             toast(response.message);
@@ -355,16 +417,16 @@ var update_company = function (key, value) {
 
 };
 
-var clear = function(element) {
-    while(element.hasChildNodes()){
+var clear = function (element) {
+    while (element.hasChildNodes()) {
         element.removeChild(element.lastChild);
     }
 };
 
-var fetch_campaigns = function(silent){
-    if(silent ===undefined || silent === null)
+var fetch_campaigns = function (silent) {
+    if (silent === undefined || silent === null)
         silent = false;
-    if(!silent)
+    if (!silent)
         start_loading();
     var token = window.sessionStorage.getItem('auth_token');
     var code = window.sessionStorage.getItem('company_code');
@@ -376,11 +438,11 @@ var fetch_campaigns = function(silent){
             company_code: code
         },
         success: function (response) {
-            if(response.success){
+            if (response.success) {
                 var campaigns = response.message;
                 var camp_list = document.querySelector('#camp_list_actual');
                 clear(camp_list);
-                for(var i in campaigns){
+                for (var i in campaigns) {
                     var campaign = campaigns[i];
                     var li = document.createElement('li');
                     var a = document.createElement('a');
@@ -388,20 +450,20 @@ var fetch_campaigns = function(silent){
                     a.className = 'amber-text text-darken-4';
                     a.href = '#campaigns/' + campaign['campaign_code'];
                     a.setAttribute('onclick', "open_campaign('" + campaign['campaign_code'] + "')");
-                    a.appendChild(new Text(campaign['campaign_code'] + " : " +  campaign['name']));
-                    a.title =  campaign['details'];
+                    a.appendChild(new Text(campaign['campaign_code'] + " : " + campaign['name']));
+                    a.title = campaign['details'];
                     li.appendChild(a);
                     camp_list.appendChild(li);
                 }
                 stop_loading();
-            }else{
+            } else {
                 toast(response.message);
             }
             stop_loading();
         },
         error: function (error) {
             var response = error.responseJSON;
-            if(response === undefined){
+            if (response === undefined) {
                 response = JSON.parse(error.responseText);
             }
             toast(response.message);
@@ -410,7 +472,7 @@ var fetch_campaigns = function(silent){
     });
 };
 
-var add_campaign = function(){
+var add_campaign = function () {
     start_loading();
     var campaignCode = document.querySelector("#campaignCode").value;
     var campaignName = document.querySelector("#campaignName").value;
@@ -434,19 +496,19 @@ var add_campaign = function(){
         },
         dataType: 'json',
         success: function (response) {
-            if(response.success){
+            if (response.success) {
                 toast(response.message);
                 document.forms.new_campaign.reset();
                 toast("Refreshing campaigns...");
                 fetch_campaigns();
-            }else{
+            } else {
                 toast(response.message);
             }
             stop_loading();
         },
         error: function (error) {
             var response = error.responseJSON;
-            if(response === undefined){
+            if (response === undefined) {
                 response = JSON.parse(error.responseText);
             }
             toast(response.message);
