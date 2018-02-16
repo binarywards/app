@@ -73,20 +73,29 @@ class rewards:
                             message = "Unknown type of campaign provided"
                         if cont:
                             if token['prize_type'] == 'Airtime':
-                                # Send airtime
-                                result = self.gateway.buy_airtime_single(phoneNumber, token['prize_amount'])
-
-                                if str(result["responses"][0]["status"]).lower() == 'sent':
-                                    request_id = result["responses"][0]["requestId"]
-                                    database.record_reward(company, campaign_code, True, request_id, phoneNumber,
-                                                           redemptionCode, 'Airtime', token['prize_amount'])
-                                    success = True
-                                    status = utils.status_code.success
-                                    message = "You have successfully redeemed KES " + str(token['prize_amount']) +\
-                                              "worth of airtime to" + str(phoneNumber)
+                                comp_data = self.db.child('app').child('companies').child(company).\
+                                    child('details').get().val()
+                                balance = utils.fill_default(comp_data, 'balance', 0)
+                                if int(balance) >= int(token['prize_amount']):
+                                    # Send airtime
+                                    result = self.gateway.buy_airtime_single(phoneNumber, token['prize_amount'])
+                                    new_bal = int(balance) - int(token['prize_amount'])
+                                    self.db.child('app').child('companies').child(company). \
+                                        child('details').update(dict(balance=new_bal))
+                                    if str(result["responses"][0]["status"]).lower() == 'sent':
+                                        request_id = result["responses"][0]["requestId"]
+                                        database.record_reward(company, campaign_code, True, request_id, phoneNumber,
+                                                               redemptionCode, 'Airtime', token['prize_amount'])
+                                        success = True
+                                        status = utils.status_code.success
+                                        message = "You have successfully redeemed KES " + str(token['prize_amount']) +\
+                                                  "worth of airtime to" + str(phoneNumber)
+                                    else:
+                                        utils.async_logger("Airtime error:", result["responses"][0]["errorMessage"])
+                                        message = "Unable to send airtime, please retry"
                                 else:
-                                    utils.async_logger("Airtime error:", result["responses"][0]["errorMessage"])
-                                    message = "Unable to send airtime, please retry"
+                                    message = "Resources unavailable to complete your request, please check again later"
+                                    status = utils.status_code.forbidden
                             else:
                                 database.record_reward(company, campaign_code, False, None, phoneNumber,
                                                        redemptionCode, token['prize_type'], token['prize_amount'])

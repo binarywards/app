@@ -69,6 +69,13 @@ def actions():
             "headers": [],
             "function": comp.add_campaign
         },
+        "company_new_campaign_token": {
+            "description": "Adds a new campaign by an organization",
+            "method": "POST",
+            "parameters": ['company_code', 'campaign_code', 'token', 'redeem_code', 'ryward_type', 'amount'],
+            "headers": [],
+            "function": comp.add_token
+        },
         "rewards_call": {
             "description": "Will check if a specified token exists in our system",
             "method": "POST",

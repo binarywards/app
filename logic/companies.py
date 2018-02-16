@@ -21,8 +21,8 @@ class company:
             push(dict(time=utils.human_date(), action='User logged in.'))
 
     def logged_in(self, company_code, token):
-        record = self.db.child('app').child('companies').child(company_code).\
-                        child('login_records').child(token).get().val()
+        record = self.db.child('app').child('companies').child(company_code). \
+            child('login_records').child(token).get().val()
         if record is not None:
             if record["active"]:
                 return True
@@ -41,7 +41,7 @@ class company:
                 password = utils.sha256(old_password)
                 if comp['password'] == password:
                     if new_password is not None and len(new_password) >= 8:
-                        self.db.child('app').child('companies').child(company_code).child('details').\
+                        self.db.child('app').child('companies').child(company_code).child('details'). \
                             update(dict(password=utils.sha256(new_password)))
                         message = "Password updated"
                         status = utils.status_code.success
@@ -94,7 +94,7 @@ class company:
             if utils.validate_phone(phone_number):
                 phone = "+254" + phone_number[(len(phone_number) - 9):len(phone_number)]
                 if utils.validate_email(email):
-                    if company_code is not None and str(company_code).isalpha() and len(company_code)<=6:
+                    if company_code is not None and str(company_code).isalpha() and len(company_code) <= 6:
                         existing_company = self.db.child("app").child("companies").child(company_code).get().val()
                         if existing_company is None:
                             if len(str(password)) >= 8:
@@ -102,9 +102,11 @@ class company:
                                 custom = utils.random_string(6, "0123456789")
                                 database.add_custom_token(custom, 'Airtime', '20')
                                 params = dict(to=phone, message="Welcome to Bina Rywards." +
-                                              "\nUse the welcome token below to receive KES 20 airtime" +
-                                              " from our website.\nToken: BINA "+str(custom)+"\nOr " +
-                                              "visit: https://binarywards.tech/#redeem/BINA/"+str(custom)+"\n")
+                                                                "\nUse the welcome token below to receive KES 20 airtime" +
+                                                                " from our website.\nToken: BINA " + str(
+                                    custom) + "\nOr " +
+                                                                "visit: https://binarywards.tech/#redeem/BINA/" + str(
+                                    custom) + "\n")
                                 utils.run_in_background(self.gateway.send_message, **params)
                                 status = utils.status_code.success
                                 success = True
@@ -129,7 +131,7 @@ class company:
         return utils.api_return(success, message, status)
 
     def add_campaign(self, company_code, campaign_name, campaign_code, message, custom_message, details,
-                    callback, token_call, token):
+                     callback, token_call, token):
         status = utils.status_code.system_error
         camp_message = message
         message = "Unknown error occurred, please retry"
@@ -140,7 +142,8 @@ class company:
                 if current is None:
                     if self.db.child('app').child('companies').child(company_code).get().val() is not None:
                         database.create_campaign(company_code,
-                                                 campaign_name, campaign_code, camp_message, custom_message, details, callback,
+                                                 campaign_name, campaign_code, camp_message, custom_message, details,
+                                                 callback,
                                                  token_call)
                         message = "Campaign " + str(campaign_name) + "Added successfully"
                         success = True
@@ -165,7 +168,8 @@ class company:
         try:
             if self.logged_in(company_code, token):
                 if self.db.child('app').child('companies').child(company_code).get().val() is not None:
-                    campaigns = self.db.child('app').child('companies').child(company_code).child('campaigns').get().val()
+                    campaigns = self.db.child('app').child('companies').child(company_code).child(
+                        'campaigns').get().val()
                     if campaigns is None:
                         campaigns = dict()
                     message = []
@@ -196,7 +200,7 @@ class company:
                 current = self.db.child('app').child('campaigns').child(campaign_code).get().val()
                 if current is not None:
                     if self.db.child('app').child('companies').child(company_code).get().val() is not None:
-                        campaign = self.db.child('app').child('companies').child(company_code).\
+                        campaign = self.db.child('app').child('companies').child(company_code). \
                             child('campaigns').child(campaign_code).get().val()
                         message = dict()
                         message['name'] = campaign['name']
@@ -215,6 +219,40 @@ class company:
                 else:
                     status = utils.status_code.not_found
                     message = "Campaign not found"
+            else:
+                status = utils.status_code.forbidden
+                message = "Invalid authentication code"
+        except Exception as error:
+            utils.async_logger(str(error), traceback.format_exc(4))
+        return utils.api_return(success, message, status)
+
+    def add_token(self, company_code, campaign_code, token, redeem_code, ryward_type, amount):
+        success = False
+        message = "Unknown error occurred"
+        status = utils.status_code.system_error
+        try:
+            if self.logged_in(company_code, token):
+                if self.db.child('app').child('companies').child(company_code).get().val() is not None:
+                    code_exist = self.db.child('app').child('companies').child(company_code).\
+                        child('campaigns').child(campaign_code).child('tokens').child(redeem_code).get().val()
+                    if code_exist is None:
+                        if str(amount).isnumeric():
+                            self.db.child('app').child('companies').child(company_code).child('campaigns'). \
+                                child(campaign_code).child('tokens').child(redeem_code).\
+                                set(dict(redemption_code=redeem_code, prize_type=ryward_type,
+                                         prize_amount=amount, redeemed=False))
+                            message = "Token added successfully"
+                            status = utils.status_code.success
+                            success = True
+                        else:
+                            message = "Amount must be numeric"
+                            status = utils.status_code.invalid_data
+                    else:
+                        status = utils.status_code.forbidden
+                        message = "This code already exists"
+                else:
+                    status = utils.status_code.not_found
+                    message = "Company not found"
             else:
                 status = utils.status_code.forbidden
                 message = "Invalid authentication code"

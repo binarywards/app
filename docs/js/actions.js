@@ -176,7 +176,9 @@ var redeem_code = function () {
     });
 };
 
-var open_campaign = function (campaign_code, silent) {
+var current_campaign = null;
+
+var open_campaign = function (campaign_code, silent){
     if (silent === undefined || silent === null)
         silent = false;
     if (!silent)
@@ -201,6 +203,7 @@ var open_campaign = function (campaign_code, silent) {
         },
         success: function (response) {
             if (response.success) {
+                current_campaign = campaign_code;
                 fill_class('.campaign_name', response.message['name']);
                 fill_class('.campaign_code', response.message['campaign_code']);
                 fill_class('.campaign_desc', response.message['details']);
@@ -235,6 +238,7 @@ var open_campaign = function (campaign_code, silent) {
         }
     });
 };
+
 var close_campaign = function () {
     var camp_list_header = document.querySelector("#camp_list_header");
     var camp_list = document.querySelector("#camp_list");
@@ -250,6 +254,7 @@ var close_campaign = function () {
     camp_content_header.classList.add("hide-on-small-and-down");
     camp_content.classList.add("hide-on-small-and-down");
 };
+
 var new_campaign = function () {
     var camp_list_header = document.querySelector("#camp_list_header");
     var camp_list = document.querySelector("#camp_list");
@@ -314,7 +319,7 @@ var company_visuals = function () {
         fetch_campaigns(true);
         fill_class('.company_name', window.sessionStorage.getItem("name"), false);
         fill_class('.company_code', window.sessionStorage.getItem("company_code"), false);
-        fill_class('.company_balance', window.sessionStorage.getItem("balance"), false);
+        fill_class('.company_balance', parseInt(window.sessionStorage.getItem("balance")).toFixed(3), false);
         fill_class('.company_email', window.sessionStorage.getItem("email"), false);
         fill_class('.company_phone', window.sessionStorage.getItem("phone"), false);
     } else {
@@ -524,3 +529,43 @@ var logout = function () {
     company_visuals();
     switch_page('#home');
 };
+
+var add_token = function () {
+    start_loading();
+    var token = window.sessionStorage.getItem('auth_token');
+    var code = window.sessionStorage.getItem('company_code');
+    var rd_code = document.querySelector("#txt_new_token").value;
+    var amount = document.querySelector("#txt_amount").value;
+    // company_code, campaign_code, token, redeem_code, ryward_type, amount
+    ajax({
+        url: "api/company_new_campaign_token",
+        type: "POST",
+        data: {
+            company_code: code,
+            campaign_code: current_campaign,
+            token: token,
+            redeem_code: rd_code,
+            ryward_type: 'Airtime',
+            amount: amount
+        },
+        dataType: "json",
+        success: function(response) {
+            if (response.success) {
+                toast(response.message);
+                document.forms.new_token.reset();
+            } else {
+                toast(response.message);
+            }
+            stop_loading();
+        },
+        error: function (error) {
+            var response = error.responseJSON;
+            if (response === undefined) {
+                response = JSON.parse(error.responseText);
+            }
+            toast(response.message);
+            stop_loading();
+        }
+    });
+};
+
