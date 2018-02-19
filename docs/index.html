@@ -41,29 +41,29 @@
     </li>
 
     <li class="menu active">
-        <a href="#home" class="white-text" onclick="switch_page(this.hash)">
+        <a href="#home" class="white-text">
             <i class="fa fa-home white-text"></i> Home
         </a>
     </li>
     <li class="subheader company_logged company_name">Company</li>
     <li class="menu company_logged">
-        <a href="#dashboard" class="white-text" onclick="switch_page(this.hash)">
+        <a href="#dashboard" class="white-text">
             <i class="fa fa-th white-text"></i> Dashboard
         </a>
     </li>
     <li class="menu company_logged">
-        <a href="#campaigns" class="white-text" onclick="switch_page(this.hash)">
+        <a href="#campaigns" class="white-text">
             <i class="fa fa-connectdevelop white-text"></i> Campaigns
         </a>
     </li>
     <li class="subheader">About us</li>
     <li class="menu">
-        <a href="#about" class="white-text" onclick="switch_page(this.hash)">
+        <a href="#about" class="white-text">
             <i class="fa fa-info white-text"></i> About
         </a>
     </li>
     <li class="menu">
-        <a href="#contact" class="white-text" onclick="switch_page(this.hash)">
+        <a href="#contact" class="white-text">
             <i class="fa fa-phone white-text"></i> Contact
         </a>
     </li>
@@ -83,12 +83,10 @@
         <h2 class="">Welcome to Bina Rywards</h2>
         <p class="flow-text">Choose your type of profile to continue:</p>
         <div>
-            <button class="btn amber darken-4 white-text waves-effect waves-light"
-                    onclick="switch_page('#redeem')">Redeem Code
-            </button>
-            <button class="btn amber darken-4 white-text waves-effect waves-light"
-                    onclick="switch_page('#company_login')">Company Login
-            </button>
+            <a href="#redeem" class="btn amber darken-4 white-text waves-effect waves-light">Redeem Code
+            </a>
+            <a href="#company_login" class="btn amber darken-4 white-text waves-effect waves-light">Company Login
+            </a>
         </div>
     </div>
 </div>
@@ -236,8 +234,7 @@
             <h4 class="center company_name">Company Name</h4>
             <div class="row center">
                 <a href="#campaigns"
-                   class="col s10 m4 offset-s1 offset-m1 waves-effect waves-light btn btn-flat amber darken-4 white-text"
-                   onclick="switch_page(this.hash)">
+                   class="col s10 m4 offset-s1 offset-m1 waves-effect waves-light btn btn-flat amber darken-4 white-text">
                     <i class="fa fa-plus-square"></i>&nbsp;Campaigns
                 </a>
                 <a class="col s10 m4 offset-s1 offset-m2  waves-effect waves-light btn-flat amber darken-4 white-text">
@@ -318,7 +315,7 @@
             <h5 class="col s10 white-text">Campaigns</h5>
             <span class="col s2 waves-orange center-align">
                 <a class="btn btn-floating white center-align" href="#campaigns/new" style="margin-top: 3px;"
-                   title="click to add a new campaign" onclick="switch_page(this.hash)">
+                   title="click to add a new campaign">
                     <i class="fa fa-plus amber-text text-darken-4"></i>
                 </a></span>
         </div>
@@ -326,11 +323,11 @@
              style="margin-bottom: 0 !important;">
             <span class="col s1 hide-on-med-and-up left-align" style="padding-left: 0; margin-left: 0;">
                 <a class="white btn btn-floating" style="margin-top: 3px; padding-left: 0; margin-left: 0;"
-                   href="#campaigns/home" onclick="switch_page(this.hash)">
+                   href="#campaigns/home">
                     <i class="fa fa-chevron-left amber-text text-darken-4"></i>
                 </a>
             </span>
-            <a href="#dashboard" onclick="switch_page(this.hash)" class="col s10 m12"><h5
+            <a href="#dashboard" class="col s10 m12"><h5
                     class="center white-text company_name">Company Name</h5></a>
         </div>
         <div id="camp_list" class="col s12 m5" style="border-right: 1px solid #ff6f00; margin-bottom: 0 !important;">
@@ -611,9 +608,13 @@ Next<br><kbd>Ctrl + Alt + N</kbd>
         $('select').material_select();
     });
 
+    var current_path = null;
+
     var first = true;
     function switch_page(id) {
         var full_path = id;
+        if(current_path === full_path)
+            return;
         var split_path = id.split("/");
         id = split_path[0];
         document.querySelector('#home').classList.add('d-none');
@@ -644,6 +645,7 @@ Next<br><kbd>Ctrl + Alt + N</kbd>
             full_path = id;
         }
         window.location.href = full_path;
+        current_path = full_path;
         if (document.querySelector(id).classList.contains('d-none')) {
             document.querySelector(id).classList.remove('d-none');
         }
@@ -677,6 +679,10 @@ Next<br><kbd>Ctrl + Alt + N</kbd>
 
     document.querySelector("#preloader").classList.add('d-none');
 
+    // Overide location
+    window.onhashchange = function () {
+        switch_page(window.location.hash);
+    };
     var path_sent = window.location.hash.split("/");
 
     switch (path_sent[0]) {

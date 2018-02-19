@@ -568,4 +568,3 @@ var add_token = function () {
         }
     });
 };
-

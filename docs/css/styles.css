@@ -188,7 +188,7 @@ a.btn{
 /*
 Empty classes just so they can be suggested by the ide
  */
-
+.auto_link,
 .company_name,
 .company_balance,
 .campaign_name,
