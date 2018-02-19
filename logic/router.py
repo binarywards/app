@@ -47,6 +47,13 @@ def actions():
             "headers": [],
             "function": comp.company_login
         },
+        "company_profile": {
+            "description": "All the details of a company",
+            "method": "POST",
+            "parameters": [],
+            "headers": ['token', 'company_code'],
+            "function": comp.company_profile
+        },
         "company_campaigns": {
             "description": "Read campaigns of a specific company",
             "method": "GET",

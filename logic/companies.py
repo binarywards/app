@@ -59,6 +59,28 @@ class company:
             utils.async_logger(str(error), traceback.format_exc(4))
         return utils.api_return(success, message, status)
 
+    def company_profile(self, company_code, token):
+        status = utils.status_code.system_error
+        message = "Unknown error occurred, please retry"
+        success = False
+        try:
+            if self.logged_in(company_code, token):
+                comp = self.db.child('app').child('companies').child(company_code).child('details').get().val()
+                if comp is not None:
+                    message = dict(name=comp['name'], company_code=company_code, email=comp['email'],
+                                   balance=comp['balance'], phone=comp['phone'])
+                    status = utils.status_code.success
+                    success = True
+                else:
+                    message = "Company does not exist"
+                    status = utils.status_code.not_found
+            else:
+                message = "You are not authorized to access this profile"
+                status = utils.status_code.forbidden
+        except Exception as error:
+            utils.async_logger(str(error), traceback.format_exc())
+        return utils.api_return(success, message, status)
+
     def company_login(self, company_code, password):
         status = utils.status_code.system_error
         message = "Unknown error occurred, please retry"
