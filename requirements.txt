@@ -3,7 +3,7 @@ chardet==3.0.4
 click==6.7
 enum34==1.1.6
 eventlet==0.22.0
-Flask==0.12.2
+Flask==1.0
 Flask-SocketIO==2.9.3
 gcloud==0.17.0
 googleapis-common-protos==1.5.3
